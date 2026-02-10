@@ -12,10 +12,10 @@
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- FUENTES TIPOGRÁFICAS ORIGINALES -->
+    <!-- FUENTES TIPOGRÁFICAS ACTUALIZADAS: Añadida Pinyon Script para el nombre -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Great+Vibes&family=Cinzel:wght@400;700&family=Pinyon+Script&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -32,8 +32,9 @@
                     },
                     fontFamily: {
                         sans: ['"Montserrat"', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'serif'],
+                        serif: ['"Cinzel"', 'serif'],
                         script: ['"Great Vibes"', 'cursive'],
+                        elegant: ['"Pinyon Script"', 'cursive'], // Nueva fuente elegante
                     }
                 }
             }
@@ -41,9 +42,8 @@
     </script>
 
     <style>
-        body { background-color: #f1f5f9; }
+        body { background-color: #f8fafc; }
         
-        /* Checkbox Personalizado */
         .step-checkbox:checked + div {
             border-color: #005f63;
             background-color: #f0fdfa;
@@ -54,9 +54,8 @@
             color: white;
         }
 
-        /* --- CONTENEDOR DE RENDERIZADO DEL PDF --- */
-        /* Se muestra como un modal a pantalla completa solo al generar para asegurar carga de fuentes */
-        #pdf-overlay {
+        /* --- CONTENEDOR PDF --- */
+        #pdf-overlay-container {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -67,185 +66,197 @@
             align-items: center;
         }
 
-        /* El lienzo exacto A4 Landscape */
-        #pdf-node {
+        #pdf-capture-node {
             width: 1123px; 
             height: 794px;
             background: white;
-            /* box-shadow solo para debug, html2canvas lo ignora si se configura bien */
-            box-shadow: 0 0 0 1px #eee; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        /* --- DISEÑO DIPLOMA (ESTILO RCOPT FIEL) --- */
-        .cert-wrapper {
+        /* --- DISEÑO DIPLOMA --- */
+        .rcopt-container {
             width: 100%; height: 100%;
+            background: #ffffff;
             position: relative;
-            background: white;
-            padding: 40px 60px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            padding: 50px 70px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
             overflow: hidden;
         }
 
-        /* Elemento decorativo de fondo (Curva Azul) */
-        .cert-bg {
+        /* Gráfico de fondo */
+        .bg-curve {
             position: absolute;
-            top: -40%; right: -25%;
+            top: -40%; right: -30%;
             width: 900px; height: 900px;
-            background: radial-gradient(circle, rgba(0,95,99,0.06) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,95,99,0.06) 0%, rgba(255,255,255,0) 70%);
             z-index: 0;
             pointer-events: none;
         }
 
         /* Header */
-        .cert-header { text-align: center; z-index: 10; margin-top: 20px; }
-        .brand-logo {
-            font-family: 'Montserrat', sans-serif;
+        .cert-header {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 20px;
+        }
+        .logo-main {
             font-size: 55px;
             font-weight: 800;
             color: #005f63;
             letter-spacing: -2px;
             line-height: 1;
         }
-        .brand-tagline {
+        .logo-sub {
             font-family: 'Great Vibes', cursive;
             color: #C5A059;
             font-size: 38px;
-            margin-top: -15px;
+            position: relative;
+            top: -12px;
             line-height: 1;
         }
-        .brand-sub {
+        .logo-sub span {
             font-family: 'Montserrat', sans-serif;
             font-size: 11px;
-            letter-spacing: 3px;
             text-transform: uppercase;
+            letter-spacing: 3px;
             color: #444;
-            position: relative;
-            top: -5px;
+            display: block;
+            margin-top: -5px;
             font-weight: 600;
         }
 
-        /* Títulos Principales */
-        .cert-titles { text-align: center; z-index: 10; margin-top: 30px; }
-        .txt-exp {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
+        /* Cuerpo */
+        .body-block {
+            text-align: center;
+            z-index: 10;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-exp {
             font-size: 24px;
             letter-spacing: 8px;
+            color: #777;
             text-transform: uppercase;
-            color: #666;
+            font-weight: 300;
+            margin-bottom: 5px;
         }
-        .txt-cert {
-            font-family: 'Playfair Display', serif; /* Tipografía Original */
-            font-weight: 700;
-            font-size: 58px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .title-cert {
+            font-size: 52px;
+            letter-spacing: 4px;
             color: #000;
-            line-height: 1.1;
-            margin-top: 5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 30px;
         }
 
-        /* Cuerpo del Texto */
-        .cert-body { text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .txt-normal {
-            font-family: 'Montserrat', sans-serif;
+        .text-normal {
             font-size: 18px;
             color: #555;
-            margin: 5px 0;
+            margin-bottom: 5px;
+            font-weight: 400;
         }
-        .txt-product {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
+        .product-name {
             font-size: 22px;
+            font-weight: 800;
             color: #005f63;
-            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 25px;
         }
-
-        /* NOMBRE DEL DOCTOR (Script Elegante) */
-        .txt-candidate {
-            font-family: 'Great Vibes', cursive;
-            font-size: 110px;
+        
+        /* --- NOMBRE DEL DOCTOR MODIFICADO --- */
+        .candidate-name {
+            font-family: 'Pinyon Script', cursive; /* Nueva fuente elegante */
+            font-size: 110px; /* Tamaño ajustado para legibilidad */
             color: #005f63;
             line-height: 1.2;
-            margin: 10px auto 30px auto;
+            margin: 10px 0 30px 0;
             padding: 0 40px;
             border-bottom: 1px solid #e5e5e5;
-            display: inline-block;
             min-width: 600px;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
+            display: inline-block;
+            letter-spacing: 1px; /* Espaciado para mayor elegancia */
         }
 
-        /* Detalles e Info Trainer */
-        .txt-details {
-            font-family: 'Montserrat', sans-serif;
+        .location-text {
             font-size: 15px;
             color: #666;
-            margin-bottom: 5px;
             font-weight: 500;
-        }
-        .txt-trainer {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            color: #005f63;
-            font-weight: 600;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         /* Firmas */
-        .cert-footer {
+        .footer-block {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             margin-top: 40px;
-            padding: 0 20px;
+            padding: 0 10px;
             z-index: 10;
         }
-        .sig-col { text-align: center; width: 240px; }
-        .sig-fake {
+        .sig-item {
+            text-align: center;
+            width: 240px;
+        }
+        .sig-image {
             font-family: 'Great Vibes', cursive;
             font-size: 32px;
             color: #005f63;
             height: 50px;
-            display: flex; align-items: flex-end; justify-content: center;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .sig-line {
+            border-top: 1px solid #999;
+            width: 100%;
             margin-bottom: 5px;
         }
-        .sig-line { border-top: 1px solid #999; margin: 5px 0; }
-        .sig-name {
-            font-family: 'Montserrat', sans-serif;
+        .sig-name-print {
             font-size: 13px;
             font-weight: 700;
             color: #222;
         }
         .sig-role {
-            font-family: 'Montserrat', sans-serif;
             font-size: 10px;
-            text-transform: uppercase;
             color: #666;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-top: 2px;
             line-height: 1.2;
         }
 
-        .cert-id {
+        .id-badge {
             position: absolute;
-            bottom: 25px; right: 25px;
-            font-family: monospace;
+            bottom: 20px;
+            right: 25px;
             font-size: 11px;
-            color: #aaa;
+            color: #bbb;
+            font-family: monospace;
         }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-content { animation: slideUp 0.3s ease-out forwards; }
 
     </style>
 </head>
 <body class="min-h-screen text-slate-800 font-sans relative overflow-x-hidden">
 
     <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200 py-4 sticky top-0 z-20 shadow-sm">
+    <header class="bg-white border-b border-slate-100 py-4 sticky top-0 z-20 shadow-sm relative bg-white">
         <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-brand-500 text-white rounded-lg flex items-center justify-center font-serif text-xl font-bold shadow-lg">B</div>
@@ -254,7 +265,7 @@
                     <p class="text-xs text-slate-400 font-medium">Eyecryl Phakic Certification</p>
                 </div>
             </div>
-            <button onclick="showDashboard()" class="text-sm font-bold text-slate-500 hover:text-brand-500 transition flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg hover:bg-white">
+            <button onclick="showDashboard()" class="text-sm font-bold text-slate-500 hover:text-brand-500 transition flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg hover:bg-slate-100">
                 <i class="fas fa-list"></i> Ver Listado
             </button>
         </div>
@@ -270,13 +281,13 @@
                     <h2 class="text-2xl font-bold text-slate-800 font-serif">Expedientes</h2>
                     <p class="text-sm text-slate-500">Gestión de certificaciones activas</p>
                 </div>
-                <button onclick="createNew()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg shadow-lg font-bold transition flex items-center gap-2 transform active:scale-95">
+                <button onclick="createNew()" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-lg shadow-lg font-bold transition flex items-center gap-2 transform active:scale-95">
                     <i class="fas fa-plus"></i> Nueva Certificación
                 </button>
             </div>
 
-            <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <!-- JS Inject -->
+            <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Se rellena con JS -->
             </div>
         </div>
 
@@ -296,40 +307,28 @@
                 <div class="lg:col-span-2 space-y-6">
                     
                     <!-- Datos -->
-                    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-                        <h3 class="font-bold text-lg text-brand-500 mb-6 flex items-center gap-2 border-b pb-2">
-                            <i class="fas fa-user-doctor"></i> Datos del Registro
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-brand-500 mb-4 flex items-center gap-2">
+                            <i class="fas fa-user-doctor"></i> Datos del Doctor
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold text-slate-400 uppercase">Nombre Doctor/a</label>
-                                <input type="text" id="inp-nombre" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Ej: Ana">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold text-slate-400 uppercase">Apellidos</label>
-                                <input type="text" id="inp-apellidos" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Ej: García López">
-                            </div>
-                            <div class="space-y-1 md:col-span-2">
-                                <label class="text-xs font-bold text-slate-400 uppercase">Clínica</label>
-                                <input type="text" id="inp-clinica" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Centro Médico">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold text-slate-400 uppercase">Email</label>
-                                <input type="email" id="inp-email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="correo@ejemplo.com">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold text-orange-500 uppercase">Certificador (Trainer)</label>
-                                <input type="text" id="inp-trainer" class="w-full p-3 bg-orange-50 border border-orange-200 rounded-lg focus:border-orange-500 focus:bg-white outline-none transition text-orange-900 font-medium" placeholder="Tu Nombre">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="inp-nombre" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Nombre">
+                            <input type="text" id="inp-apellidos" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Apellidos">
+                            <input type="text" id="inp-clinica" class="col-span-1 md:col-span-2 w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Clínica / Hospital">
+                            <input type="email" id="inp-email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Email">
+                            <div class="col-span-1 md:col-span-2 relative">
+                                <label class="absolute -top-2 left-2 bg-white px-1 text-[10px] font-bold text-orange-500 uppercase">Certificador (Trainer)</label>
+                                <input type="text" id="inp-trainer" class="w-full p-3 bg-orange-50 border border-orange-200 rounded-lg focus:border-orange-500 focus:bg-white outline-none transition text-orange-900 font-medium" placeholder="Tu nombre">
                             </div>
                         </div>
                     </div>
 
                     <!-- PASO 1 -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 group-hover:w-2 transition-all"></div>
-                        <div class="flex justify-between items-center mb-4 pl-3">
-                            <h3 class="font-bold text-lg text-slate-800 flex items-center gap-3">
-                                <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold shadow-sm">1</span>
+                        <div class="flex justify-between items-center mb-4 pl-2">
+                            <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</span>
                                 Formación Técnica
                             </h3>
                             <div class="flex items-center gap-2">
@@ -338,34 +337,34 @@
                             </div>
                         </div>
                         
-                        <div class="space-y-3 pl-3">
+                        <div class="space-y-3 pl-2">
                             <label class="cursor-pointer block">
                                 <input type="checkbox" id="chk-teorica" class="step-checkbox hidden" onchange="updateProgress()">
-                                <div class="flex items-center p-3 rounded-lg border border-slate-200 hover:border-brand-500 transition bg-slate-50/50">
+                                <div class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 transition">
                                     <div class="icon-box w-5 h-5 rounded border border-slate-300 mr-3 flex items-center justify-center text-[10px] transition text-transparent">
                                         <i class="fas fa-check"></i>
                                     </div>
-                                    <span class="text-sm font-medium text-slate-700">Formación Teórica (Propiedades)</span>
+                                    <span class="text-sm font-medium">Formación Teórica</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer block">
                                 <input type="checkbox" id="chk-cargado" class="step-checkbox hidden" onchange="updateProgress()">
-                                <div class="flex items-center p-3 rounded-lg border border-slate-200 hover:border-brand-500 transition bg-slate-50/50">
+                                <div class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 transition">
                                     <div class="icon-box w-5 h-5 rounded border border-slate-300 mr-3 flex items-center justify-center text-[10px] transition text-transparent">
                                         <i class="fas fa-check"></i>
                                     </div>
-                                    <span class="text-sm font-medium text-slate-700">Cargado de Lente (Presencial)</span>
+                                    <span class="text-sm font-medium">Cargado de Lente (Presencial)</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
                     <!-- PASO 2 -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500 group-hover:w-2 transition-all"></div>
-                        <div class="flex justify-between items-center mb-4 pl-3">
-                            <h3 class="font-bold text-lg text-slate-800 flex items-center gap-3">
-                                <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-sm font-bold shadow-sm">2</span>
+                        <div class="flex justify-between items-center mb-4 pl-2">
+                            <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs font-bold">2</span>
                                 Validación Quirúrgica
                             </h3>
                             <div class="flex items-center gap-2">
@@ -374,15 +373,15 @@
                             </div>
                         </div>
 
-                        <label class="cursor-pointer block pl-3">
+                        <label class="cursor-pointer block pl-2">
                             <input type="checkbox" id="chk-quirofano" class="step-checkbox hidden" onchange="updateProgress()">
-                            <div class="flex items-center p-4 rounded-lg border border-slate-200 hover:border-brand-500 transition bg-slate-50/50">
+                            <div class="flex items-center p-4 rounded-xl border border-slate-200 hover:border-brand-500 transition">
                                 <div class="icon-box w-5 h-5 rounded border border-slate-300 mr-3 flex items-center justify-center text-[10px] transition text-transparent">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
                                     <span class="block text-sm font-bold text-slate-800">Acompañamiento en Quirófano</span>
-                                    <span class="text-xs text-slate-500">Implante de 4 ojos (2 pacientes) supervisado</span>
+                                    <span class="text-xs text-slate-500">Implante de 4 ojos (2 pacientes)</span>
                                 </div>
                             </div>
                         </label>
@@ -409,10 +408,9 @@
                                 <i class="fas fa-save"></i> Guardar Cambios
                             </button>
                             <button id="btn-finish" onclick="finalizeProcess()" disabled class="w-full py-3 rounded-lg bg-slate-100 text-slate-400 font-bold text-sm cursor-not-allowed transition flex items-center justify-center gap-2 shadow-inner">
-                                <i class="fas fa-award"></i> Generar Diploma
+                                <i class="fas fa-file-pdf"></i> Generar Diploma
                             </button>
                         </div>
-                        <p id="loading-msg" class="hidden text-center text-xs text-brand-500 mt-4 animate-pulse font-bold">Generando Diploma...</p>
                     </div>
                 </div>
 
@@ -422,68 +420,64 @@
     </main>
 
     <!-- --- OVERLAY PDF (RENDERIZADO VISIBLE) --- -->
-    <div id="pdf-overlay">
-        <div id="pdf-node">
-            <div class="cert-wrapper">
-                <div class="cert-bg"></div>
+    <div id="pdf-overlay-container">
+        <div id="pdf-capture-node">
+            <div class="rcopt-container">
+                <div class="bg-curve"></div>
                 
-                <!-- HEADER -->
+                <!-- Header -->
                 <div class="cert-header">
-                    <div class="brand-logo">biotech</div>
-                    <div class="brand-tagline">25 Years</div>
-                    <div class="brand-sub">OF INNOVATION</div>
+                    <div class="logo-main">biotech</div>
+                    <div class="logo-sub">25 YEARS <span>OF INNOVATION</span></div>
                 </div>
 
-                <!-- TITULO -->
-                <div class="cert-titles">
-                    <div class="txt-exp">EXPERIENCE LAB</div>
-                    <div class="txt-cert">CERTIFICATE</div>
+                <!-- Contenido -->
+                <div class="body-block">
+                    <div class="title-exp">EXPERIENCE LAB</div>
+                    <div class="title-cert">CERTIFICATE</div>
+                    
+                    <p class="text-normal">for successfully completing hands-on training of</p>
+                    <p class="product-name">EYECRYL PHAKIC IOL</p>
+                    
+                    <p class="text-normal">This certificate is awarded to</p>
+                    
+                    <!-- Nombre Dinámico (TIPOGRAFÍA ACTUALIZADA) -->
+                    <div id="pdf-name" class="candidate-name">Dr. Nombre Apellido</div>
+                    
+                    <p class="location-text">@ RCOPT 2025, Ireland on <span id="pdf-date">---</span></p>
                 </div>
 
-                <!-- BODY -->
-                <div class="cert-body">
-                    <p class="txt-normal">for successfully completing hands-on training of</p>
-                    <p class="txt-product">EYECRYL PHAKIC IOL</p>
-                    
-                    <p class="txt-normal">This certificate is awarded to</p>
-                    
-                    <!-- DATO DINÁMICO: DOCTOR -->
-                    <div id="pdf-name" class="txt-candidate">Dr. Nombre Apellido</div>
-                    
-                    <div class="txt-details">
-                        @ RCOPT 2025, Ireland on <span id="pdf-date" style="font-weight:bold;">---</span>
-                    </div>
-                    <!-- DATO DINÁMICO: TRAINER -->
-                    <div class="txt-trainer">
-                        Training conducted by: <span id="pdf-trainer-name">---</span>
-                    </div>
-                </div>
-
-                <!-- FOOTER: FIRMAS -->
-                <div class="cert-footer">
-                    <div class="sig-col">
-                        <div class="sig-fake">Carlos Ríos</div>
+                <!-- Firmas -->
+                <div class="footer-block">
+                    <div class="sig-item">
+                        <div class="sig-image">Carlos Ríos</div>
                         <div class="sig-line"></div>
-                        <div class="sig-name">Carlos Ríos</div>
+                        <div class="sig-name-print">Carlos Ríos</div>
                         <div class="sig-role">Global Business Dev. Manager</div>
                     </div>
                     
-                    <div class="sig-col">
-                        <div class="sig-fake">Marta Bautista</div>
+                    <div class="sig-item">
+                        <div class="sig-image">Marta Bautista</div>
                         <div class="sig-line"></div>
-                        <div class="sig-name">Marta Bautista</div>
+                        <div class="sig-name-print">Marta Bautista</div>
                         <div class="sig-role">Regional BDM, Iberia</div>
                     </div>
 
-                    <div class="sig-col">
-                        <div class="sig-fake">D. G. Khalsa</div>
+                    <div class="sig-item">
+                        <div class="sig-image">D. G. Khalsa</div>
                         <div class="sig-line"></div>
-                        <div class="sig-name">D. G. Khalsa</div>
+                        <div class="sig-name-print">D. G. Khalsa</div>
                         <div class="sig-role">Head – Marketing & Clinical Affairs</div>
                     </div>
                 </div>
+                
+                <!-- Firma Trainer -->
+                <div style="position: absolute; bottom: 85px; width: 100%; text-align: center; left: 0;">
+                    <p style="font-size: 10px; color: #999;">Certified by: <span id="pdf-trainer-name" style="color: #005f63; font-weight: 700;"></span></p>
+                </div>
 
-                <div class="cert-id">ID: <span id="pdf-id">---</span></div>
+                <!-- ID -->
+                <div class="id-badge">ID: <span id="pdf-id">---</span></div>
             </div>
         </div>
     </div>
@@ -526,7 +520,7 @@
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v18_final';
+        const DB_KEY = 'biotech_cert_v22_final_font';
         let db = [];
         let currentId = null;
         let currentMailto = "";
@@ -549,7 +543,7 @@
 
         function createNew() {
             const year = new Date().getFullYear();
-            // ID Numérico (Ej: 2025-4812)
+            // ID SOLO NUMÉRICO
             const id = `${year}-${Math.floor(Math.random()*10000).toString().padStart(4,'0')}`;
             
             const newCert = {
@@ -573,7 +567,6 @@
             const cert = db.find(c => c.id === id);
             document.getElementById('display-id').innerText = cert.id;
             
-            // Cargar datos
             document.getElementById('inp-nombre').value = cert.nombre;
             document.getElementById('inp-apellidos').value = cert.apellidos;
             document.getElementById('inp-clinica').value = cert.clinica;
@@ -587,7 +580,7 @@
             document.getElementById('date-step2').value = cert.dateStep2 || '';
 
             const inputs = document.querySelectorAll('#view-editor input');
-            inputs.forEach(i => i.oninput = saveLocalData);
+            inputs.forEach(i => i.oninput = updateProgress); // Validación en tiempo real
             
             updateProgress();
         }
@@ -621,7 +614,9 @@
             const btn = document.getElementById('btn-finish');
             const statusText = document.getElementById('status-text');
             const pctText = document.getElementById('progress-percent');
-            const dataComplete = cert.nombre && cert.apellidos && cert.trainer;
+            
+            // Verificamos que todos los campos requeridos tengan texto
+            const dataComplete = cert.nombre.trim() !== '' && cert.apellidos.trim() !== '' && cert.trainer.trim() !== '';
 
             document.getElementById('progress-bar').style.width = `${pct}%`;
             pctText.innerText = `${pct}%`;
@@ -634,6 +629,7 @@
                 btn.disabled = false;
                 btn.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
                 btn.classList.add('bg-brand-500', 'hover:bg-brand-600', 'text-white', 'shadow-lg');
+                btn.innerHTML = '<i class="fas fa-award"></i> Generar Diploma';
             } else {
                 if(cert.status !== 'Finalizada') cert.status = 'En Proceso';
                 statusText.innerText = "En Proceso";
@@ -642,6 +638,10 @@
                 btn.disabled = true;
                 btn.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
                 btn.classList.remove('bg-brand-500', 'hover:bg-brand-600', 'text-white', 'shadow-lg');
+                
+                // Feedback visual en el botón
+                if(!dataComplete) btn.innerText = "Faltan Datos";
+                else btn.innerText = "Completar Pasos";
             }
             persist();
         }
@@ -707,16 +707,15 @@
 
             document.getElementById('pdf-name').innerText = `Dr. ${cert.nombre} ${cert.apellidos}`;
             document.getElementById('pdf-id').innerText = cert.id;
-            
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
             document.getElementById('pdf-date').innerText = finalDate;
             document.getElementById('pdf-trainer-name').innerText = cert.trainer;
 
             // 1. Mostrar el contenedor del PDF en pantalla completa (Overlay)
-            const overlay = document.getElementById('pdf-overlay');
+            const overlay = document.getElementById('pdf-overlay-container');
             overlay.style.display = 'flex'; // Hace visible el renderizado
 
-            const element = document.getElementById('pdf-node');
+            const element = document.getElementById('pdf-capture-node');
             const filename = `Certificado_${cert.apellidos}_${cert.id}.pdf`;
             
             const opt = { 
@@ -727,7 +726,7 @@
                 jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape' } 
             };
 
-            // Esperar 1.5s para asegurar carga de fuentes
+            // Pequeña espera para asegurar que el navegador ha "pintado" el overlay
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
                     // 2. Ocultar el overlay
@@ -741,7 +740,7 @@
 
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
-            }, 1500);
+            }, 800);
         }
 
         function openMailAndClose() { window.location.href = currentMailto; }
