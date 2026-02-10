@@ -68,69 +68,159 @@
             position: relative;
         }
 
-        /* Estilos del Diploma */
+        /* Estilos del Diploma RENOVADOS */
         .cert-container {
             width: 100%; height: 100%;
-            background: white;
+            background: #ffffff;
             position: relative;
-            overflow: hidden;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Marco Decorativo */
+        .cert-border-outer {
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid #005f63;
+            z-index: 1;
+        }
+        .cert-border-inner {
+            position: absolute;
+            top: 25px; left: 25px; right: 25px; bottom: 25px;
+            border: 4px double #C6A87C;
+            z-index: 1;
+        }
+
+        /* Contenido Principal */
+        .cert-content-layer {
+            width: 90%;
+            height: 85%;
+            z-index: 10;
+            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 40px 60px;
-            border: 1px solid #f0f0f0;
         }
 
-        .cert-bg-graphic {
-            position: absolute;
-            top: -200px; right: -200px;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(0,95,99,0.05) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            z-index: 0;
+        .cert-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 36px;
+            letter-spacing: 4px;
+            color: #005f63;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .cert-header p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #C6A87C;
+            margin-top: 5px;
+        }
+
+        .cert-title-section {
+            margin-top: 10px;
+        }
+        .cert-main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            color: #1a202c;
+            margin: 0;
+            font-weight: 700;
+        }
+        .cert-sub-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            color: #4a5568;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .cert-body {
+            margin: 20px 0;
+        }
+        .cert-text-small {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 5px;
         }
         
-        .cert-content { position: relative; z-index: 10; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        
-        .logo-text { font-weight: 700; color: #005f63; font-size: 32px; letter-spacing: 2px; }
-        .logo-sub { color: #C6A87C; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; }
-
-        .cert-title { font-family: 'Montserrat', sans-serif; font-size: 36px; letter-spacing: 6px; color: #333; margin-top: 30px; font-weight: 300; }
-        .cert-subtitle { font-family: 'Montserrat', sans-serif; font-size: 48px; letter-spacing: 4px; color: #000; font-weight: 700; margin-bottom: 20px; }
-        
-        .cert-body-text { font-size: 16px; color: #666; margin-bottom: 10px; }
-        
-        .candidate-name {
+        .candidate-name-large {
             font-family: 'Great Vibes', cursive;
             font-size: 90px;
             color: #005f63;
-            margin: 10px 0 20px 0;
-            line-height: 1.2;
-            padding-bottom: 10px;
+            margin: 10px 0;
+            line-height: 1.1;
+            padding: 0 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: inline-block;
+            min-width: 50%;
         }
 
-        .cert-details { font-size: 14px; color: #555; font-weight: 500; margin-bottom: 20px; }
+        .cert-product {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: #2d3748;
+            margin-top: 5px;
+        }
 
-        .signatures-row {
+        .signatures-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 30px;
-            padding: 0 40px;
+            margin-top: 20px;
+            padding: 0 20px;
         }
-        .sig-block { text-align: center; width: 250px; }
-        .sig-img-placeholder { 
-            font-family: 'Great Vibes', cursive; 
-            font-size: 30px; 
-            color: #005f63; 
-            height: 60px; 
-            display: flex; 
-            align-items: flex-end; 
-            justify-content: center; 
-            margin-bottom: 5px;
+        .sig-box {
+            text-align: center;
+            width: 220px;
         }
-        .sig-name { font-weight: 700; font-size: 14px; border-top: 1px solid #ccc; padding-top: 5px; color: #333; }
-        .sig-role { font-size: 10px; color: #666; text-transform: uppercase; }
+        .sig-line {
+            height: 1px;
+            background-color: #cbd5e1;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .sig-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 28px;
+            color: #005f63;
+            margin-bottom: -10px; /* Ajuste visual para la firma */
+            display: block;
+            height: 40px;
+        }
+        .sig-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: #2d3748;
+            text-transform: uppercase;
+        }
+        .sig-role {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            color: #718096;
+            margin-top: 2px;
+        }
+
+        .cert-footer-id {
+            position: absolute;
+            bottom: 35px;
+            right: 40px;
+            font-family: monospace;
+            font-size: 10px;
+            color: #a0aec0;
+            z-index: 20;
+        }
 
         /* Animación Modal */
         @keyframes fadeIn {
@@ -351,69 +441,82 @@
     <div id="pdf-container-wrapper">
         <div id="pdf-hidden-area">
             <div class="cert-container">
-                <div class="cert-bg-graphic"></div>
+                <!-- Marco exterior -->
+                <div class="cert-border-outer"></div>
+                <!-- Marco interior -->
+                <div class="cert-border-inner"></div>
                 
-                <!-- Encabezado Logo -->
-                <div style="text-align:center; z-index:10;">
-                    <div class="logo-text">biotech</div>
-                    <div class="logo-sub">25 YEARS OF INNOVATION</div>
-                </div>
-
-                <!-- Contenido Principal -->
-                <div class="cert-content">
-                    <div class="cert-title">EXPERIENCE LAB</div>
-                    <div class="cert-subtitle">CERTIFICATE</div>
+                <div class="cert-content-layer">
                     
-                    <p class="cert-body-text">for successfully completing hands-on training of</p>
-                    <p style="font-weight:700; color:#005f63; font-size:18px; margin-bottom:10px;">EYECRYL PHAKIC IOL</p>
-                    
-                    <p class="cert-body-text">This certificate is awarded to</p>
-                    
-                    <!-- NOMBRE DINÁMICO -->
-                    <div id="pdf-name" class="candidate-name">Dr. Nombre Apellido</div>
-                    
-                    <div class="cert-details">
-                        <p>@ RCOPT 2025, Ireland on <span id="pdf-date">---</span></p>
-                    </div>
-                </div>
-
-                <!-- Firmas Dinámicas -->
-                <div class="signatures-row">
-                    <div class="sig-block">
-                        <div class="sig-img-placeholder">Carlos Ríos</div>
-                        <div class="sig-name">Carlos Ríos</div>
-                        <div class="sig-role">Global Business Dev. Manager</div>
-                    </div>
-                    
-                    <!-- FIRMA DEL TRAINER DINÁMICA -->
-                    <div class="sig-block">
-                        <div class="sig-img-placeholder" id="pdf-trainer-sig">---</div>
-                        <div class="sig-name" id="pdf-trainer-name">---</div>
-                        <div class="sig-role">Clinical Trainer / Certifier</div>
+                    <!-- Header -->
+                    <div class="cert-header">
+                        <h1>Biotech</h1>
+                        <p>Healthcare Vision Division</p>
                     </div>
 
-                    <div class="sig-block">
-                        <div class="sig-img-placeholder">D. G. Khalsa</div>
-                        <div class="sig-name">D. G. Khalsa</div>
-                        <div class="sig-role">Head – Marketing & Clinical Affairs</div>
+                    <!-- Título -->
+                    <div class="cert-title-section">
+                        <h2 class="cert-main-title">Certificate</h2>
+                        <h3 class="cert-sub-title">of Excellence</h3>
                     </div>
-                </div>
 
-                <!-- ID en esquina -->
-                <div style="position: absolute; bottom: 20px; right: 20px; font-size: 10px; font-family: monospace; color: #999;">
-                    ID: <span id="pdf-id">---</span>
+                    <!-- Cuerpo -->
+                    <div class="cert-body">
+                        <p class="cert-text-small">This is to certify that</p>
+                        
+                        <!-- Nombre del Doctor -->
+                        <div id="pdf-name" class="candidate-name-large">Dr. Nombre Apellido</div>
+                        
+                        <p class="cert-text-small">has successfully completed the training and surgical validation for</p>
+                        <p class="cert-product">EYECRYL PHAKIC IOL SYSTEM</p>
+                    </div>
+
+                    <!-- Detalles -->
+                    <div>
+                        <p class="cert-text-small">@ RCOPT 2025, Ireland | Date: <span id="pdf-date">---</span></p>
+                    </div>
+
+                    <!-- Firmas -->
+                    <div class="signatures-section">
+                        <!-- Firma 1 -->
+                        <div class="sig-box">
+                            <span class="sig-text">Carlos Rios</span>
+                            <div class="sig-line"></div>
+                            <div class="sig-name">Carlos Ríos</div>
+                            <div class="sig-role">Global Business Dev. Manager</div>
+                        </div>
+
+                        <!-- Firma Dinámica Trainer -->
+                        <div class="sig-box">
+                            <span class="sig-text" id="pdf-trainer-sig">---</span>
+                            <div class="sig-line"></div>
+                            <div class="sig-name" id="pdf-trainer-name">---</div>
+                            <div class="sig-role">Clinical Trainer</div>
+                        </div>
+
+                        <!-- Firma 3 -->
+                        <div class="sig-box">
+                            <span class="sig-text">D. G. Khalsa</span>
+                            <div class="sig-line"></div>
+                            <div class="sig-name">D. G. Khalsa</div>
+                            <div class="sig-role">Head – Marketing & Clinical Affairs</div>
+                        </div>
+                    </div>
+
                 </div>
+                
+                <!-- ID -->
+                <div class="cert-footer-id">ID: <span id="pdf-id">---</span></div>
             </div>
         </div>
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v12_fixed'; // Nueva clave para evitar conflictos
+        const DB_KEY = 'biotech_cert_v13_fixed';
         let db = [];
         let currentId = null;
         let currentMailto = "";
         
-        // ** CONFIGURA AQUÍ TU URL DE SHAREPOINT **
         const SHAREPOINT_URL = "https://biotechhealthcare.sharepoint.com/"; 
 
         window.onload = () => {
@@ -436,7 +539,7 @@
                 id, nombre:'', apellidos:'', clinica:'', email:'', trainer:'',
                 step1_teorica: false, step1_cargado: false,
                 step2_quirofano: false,
-                dateStep1: '', dateStep2: '', // Nuevos campos de fecha
+                dateStep1: '', dateStep2: '',
                 status: 'En Proceso',
                 date: new Date().toISOString()
             };
@@ -459,7 +562,6 @@
             document.getElementById('inp-email').value = cert.email;
             document.getElementById('inp-trainer').value = cert.trainer || '';
 
-            // Cargar Checks y Fechas
             document.getElementById('chk-teorica').checked = cert.step1_teorica;
             document.getElementById('chk-cargado').checked = cert.step1_cargado;
             document.getElementById('chk-quirofano').checked = cert.step2_quirofano;
@@ -483,8 +585,6 @@
             cert.step1_teorica = document.getElementById('chk-teorica').checked;
             cert.step1_cargado = document.getElementById('chk-cargado').checked;
             cert.step2_quirofano = document.getElementById('chk-quirofano').checked;
-            
-            // Guardar fechas
             cert.dateStep1 = document.getElementById('date-step1').value;
             cert.dateStep2 = document.getElementById('date-step2').value;
             
@@ -528,7 +628,6 @@
 
         function saveAndExit() { saveLocalData(); showDashboard(); }
 
-        // --- FUNCIÓN DE BORRADO ---
         function deleteCert(id) {
             if(confirm("¿Estás seguro de que deseas eliminar este expediente? Esta acción no se puede deshacer.")) {
                 db = db.filter(c => c.id !== id);
@@ -557,7 +656,6 @@
                 const card = document.createElement('div');
                 card.className = "bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition cursor-pointer flex justify-between items-center";
                 
-                // Evitar que el clic en borrar abra el editor
                 card.onclick = function(e) { 
                     if (!e.target.closest('.delete-btn')) {
                         loadEditor(c.id); 
@@ -571,7 +669,6 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <span class="text-[10px] font-bold px-2 py-1 rounded border uppercase ${statusColor}">${c.status}</span>
-                        <!-- Botón de Borrar -->
                         <button class="delete-btn text-slate-300 hover:text-red-500 transition p-2 rounded-full hover:bg-red-50" onclick="deleteCert('${c.id}')" title="Eliminar Registro">
                             <i class="fas fa-trash-alt"></i>
                         </button>
@@ -582,7 +679,6 @@
             });
         }
 
-        // --- PDF GENERATION ---
         function finalizeProcess() {
             const cert = db.find(c => c.id === currentId);
             cert.status = 'Finalizada';
@@ -599,7 +695,6 @@
             document.getElementById('pdf-name').innerText = `Dr. ${cert.nombre} ${cert.apellidos}`;
             document.getElementById('pdf-id').innerText = cert.id;
             
-            // Usar la fecha del paso 2 si existe, sino la actual
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
             document.getElementById('pdf-date').innerText = finalDate;
             
@@ -631,12 +726,10 @@
                     btn.innerHTML = originalText;
                     document.getElementById('loading-msg').classList.add('hidden');
                     
-                    // Preparar mail
                     const subject = encodeURIComponent(`Certificación Eyecryl Phakic - ${cert.nombre} ${cert.apellidos}`);
                     const body = encodeURIComponent(`Estimado/a Dr/a. ${cert.apellidos},\n\nAdjunto encontrará su certificado de finalización del curso Eyecryl Phakic.\n\nID de Certificación: ${cert.id}\nTrainer: ${cert.trainer}\n\nAtentamente,\nBiotech Healthcare`);
                     currentMailto = `mailto:${cert.email}?cc=ly.garcia@biotechhealthcare.com&subject=${subject}&body=${body}`;
 
-                    // Mostrar Modal
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
             }, 500);
