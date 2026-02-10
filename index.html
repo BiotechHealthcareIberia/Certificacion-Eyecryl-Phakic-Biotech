@@ -12,7 +12,7 @@
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -24,7 +24,7 @@
                             600: '#004a4d',
                         },
                         gold: {
-                            500: '#C6A87C' // Biotech Gold approx
+                            500: '#C5A059' // Biotech Gold
                         }
                     },
                     fontFamily: {
@@ -40,6 +40,7 @@
     <style>
         body { background-color: #f8fafc; }
         
+        /* Checkbox Custom */
         .step-checkbox:checked + div {
             border-color: #005f63;
             background-color: #f0fdfa;
@@ -50,184 +51,185 @@
             color: white;
         }
 
-        /* --- PDF AREA --- */
+        /* --- CONTENEDOR PDF (TRUCO DE RENDERIZADO) --- */
+        /* Lo colocamos fijo detrás de todo. El navegador lo renderiza perfecto, pero el usuario no lo ve. */
         #pdf-container-wrapper {
             position: fixed;
             top: 0;
-            left: 100vw; 
+            left: 0;
             width: 1123px; 
             height: 794px; /* A4 Landscape */
-            z-index: -100;
+            z-index: -100; /* Detrás del contenido */
             background: white;
-        }
-        
-        #pdf-hidden-area {
-            width: 1123px; 
-            height: 794px;
-            background-color: #ffffff;
-            position: relative;
+            pointer-events: none; /* No interfere con clics */
         }
 
-        /* Estilos del Diploma RENOVADOS */
-        .cert-container {
+        /* --- DISEÑO DIPLOMA (ESTILO RCOPT) --- */
+        .rcopt-container {
             width: 100%; height: 100%;
             background: #ffffff;
             position: relative;
-            padding: 40px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Marco Decorativo */
-        .cert-border-outer {
-            position: absolute;
-            top: 15px; left: 15px; right: 15px; bottom: 15px;
-            border: 2px solid #005f63;
-            z-index: 1;
-        }
-        .cert-border-inner {
-            position: absolute;
-            top: 25px; left: 25px; right: 25px; bottom: 25px;
-            border: 4px double #C6A87C;
-            z-index: 1;
-        }
-
-        /* Contenido Principal */
-        .cert-content-layer {
-            width: 90%;
-            height: 85%;
-            z-index: 10;
-            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            padding: 50px 70px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .cert-header h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 36px;
-            letter-spacing: 4px;
-            color: #005f63;
-            margin: 0;
-            text-transform: uppercase;
-        }
-        .cert-header p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #C6A87C;
-            margin-top: 5px;
+        /* Gráfico de fondo (Curva azul sutil) */
+        .bg-curve {
+            position: absolute;
+            top: -30%; right: -20%;
+            width: 80%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,95,99,0.03) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
         }
 
-        .cert-title-section {
-            margin-top: 10px;
+        /* Header: Logos */
+        .cert-header {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 20px;
         }
-        .cert-main-title {
-            font-family: 'Cinzel', serif;
-            font-size: 48px;
-            color: #1a202c;
-            margin: 0;
+        .logo-main {
+            font-size: 55px;
             font-weight: 700;
+            color: #005f63;
+            letter-spacing: -2px;
+            line-height: 1;
         }
-        .cert-sub-title {
+        .logo-sub {
+            font-family: 'Great Vibes', cursive;
+            color: #C5A059;
+            font-size: 35px;
+            position: relative;
+            top: -10px;
+        }
+        .logo-sub span {
             font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            color: #4a5568;
-            font-weight: 300;
-            letter-spacing: 2px;
+            font-size: 10px;
             text-transform: uppercase;
-            margin-top: 5px;
+            letter-spacing: 3px;
+            color: #333;
+            display: block;
+            margin-top: -5px;
         }
 
-        .cert-body {
-            margin: 20px 0;
+        /* Título */
+        .title-block {
+            text-align: center;
+            z-index: 10;
         }
-        .cert-text-small {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            color: #718096;
+        .title-exp {
+            font-size: 24px;
+            letter-spacing: 8px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+        .title-cert {
+            font-size: 48px;
+            letter-spacing: 4px;
+            color: #000;
+            font-weight: 700;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Cuerpo */
+        .body-block {
+            text-align: center;
+            z-index: 10;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .text-normal {
+            font-size: 16px;
+            color: #555;
             margin-bottom: 5px;
         }
-        
-        .candidate-name-large {
-            font-family: 'Great Vibes', cursive;
-            font-size: 90px;
-            color: #005f63;
-            margin: 10px 0;
-            line-height: 1.1;
-            padding: 0 20px;
-            border-bottom: 1px solid #e2e8f0;
-            display: inline-block;
-            min-width: 50%;
-        }
-
-        .cert-product {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
+        .product-name {
             font-size: 20px;
-            color: #2d3748;
-            margin-top: 5px;
+            font-weight: 700;
+            color: #005f63;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        /* Nombre Candidato */
+        .candidate-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 100px;
+            color: #005f63;
+            line-height: 1.1;
+            margin: 10px 0 20px 0;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
         }
 
-        .signatures-section {
+        .location-text {
+            font-size: 14px;
+            color: #777;
+            font-weight: 500;
+        }
+
+        /* Firmas */
+        .footer-block {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 0 20px;
+            z-index: 10;
         }
-        .sig-box {
+        .sig-item {
             text-align: center;
             width: 220px;
         }
-        .sig-line {
-            height: 1px;
-            background-color: #cbd5e1;
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .sig-text {
+        .sig-image {
             font-family: 'Great Vibes', cursive;
             font-size: 28px;
             color: #005f63;
-            margin-bottom: -10px; /* Ajuste visual para la firma */
-            display: block;
-            height: 40px;
+            height: 50px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            margin-bottom: 5px;
         }
-        .sig-name {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 11px;
+        .sig-name-print {
+            font-size: 13px;
             font-weight: 700;
-            color: #2d3748;
-            text-transform: uppercase;
+            color: #333;
+            border-top: 1px solid #ccc;
+            padding-top: 5px;
         }
         .sig-role {
-            font-family: 'Montserrat', sans-serif;
             font-size: 9px;
-            color: #718096;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-top: 2px;
         }
 
-        .cert-footer-id {
+        .id-badge {
             position: absolute;
-            bottom: 35px;
-            right: 40px;
-            font-family: monospace;
+            bottom: 20px;
+            right: 20px;
             font-size: 10px;
-            color: #a0aec0;
-            z-index: 20;
+            color: #aaa;
+            font-family: monospace;
         }
 
         /* Animación Modal */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        .animate-modal { animation: fadeIn 0.2s ease-out forwards; }
+        .modal-content { animation: slideUp 0.3s ease-out forwards; }
 
     </style>
 </head>
@@ -235,48 +237,48 @@
 
     <!-- HEADER -->
     <header class="bg-white border-b border-slate-100 py-4 sticky top-0 z-20 shadow-sm relative bg-white">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-brand-500 text-white rounded flex items-center justify-center font-bold text-xl">B</div>
+                <div class="w-10 h-10 bg-brand-500 text-white rounded flex items-center justify-center font-bold text-xl shadow-md">B</div>
                 <div>
                     <h1 class="font-bold text-xl tracking-tight leading-none text-brand-500">Biotech Manager</h1>
-                    <p class="text-xs text-slate-400">Certification System</p>
+                    <p class="text-xs text-slate-400 font-medium">Eyecryl Phakic Certification</p>
                 </div>
             </div>
-            <button onclick="showDashboard()" class="text-sm font-medium text-slate-500 hover:text-brand-500 transition flex items-center gap-2">
+            <button onclick="showDashboard()" class="text-sm font-bold text-slate-500 hover:text-brand-500 transition flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg hover:bg-slate-100">
                 <i class="fas fa-list"></i> Ver Listado
             </button>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-4xl mx-auto px-6 py-8 relative z-10 bg-slate-50 min-h-[calc(100vh-80px)]">
+    <main class="max-w-5xl mx-auto px-6 py-8 relative z-10 bg-slate-50 min-h-[calc(100vh-80px)]">
         
         <!-- VISTA 1: DASHBOARD -->
-        <div id="view-dashboard" class="animate-fade-in">
+        <div id="view-dashboard" class="hidden">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold text-slate-800">Expedientes de Certificación</h2>
-                <button onclick="createNew()" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg shadow-md font-medium transition flex items-center gap-2 transform active:scale-95">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Expedientes</h2>
+                    <p class="text-sm text-slate-500">Gestión de certificaciones</p>
+                </div>
+                <button onclick="createNew()" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-lg shadow-lg font-bold transition flex items-center gap-2 transform active:scale-95">
                     <i class="fas fa-plus"></i> Nueva Certificación
                 </button>
             </div>
 
-            <div id="grid-container" class="space-y-4">
+            <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Se rellena con JS -->
-                <div class="text-center py-12 text-slate-400 bg-white rounded-xl border border-slate-100 shadow-sm">
-                    <p>Cargando registros...</p>
-                </div>
             </div>
         </div>
 
         <!-- VISTA 2: EDITOR -->
-        <div id="view-editor" class="hidden animate-fade-in">
+        <div id="view-editor" class="hidden">
             
             <div class="flex justify-between items-center mb-6">
-                <button onclick="saveAndExit()" class="text-slate-500 hover:text-brand-500 font-medium flex items-center gap-2">
-                    <i class="fas fa-chevron-left"></i> Volver al listado
+                <button onclick="saveAndExit()" class="text-slate-500 hover:text-brand-500 font-bold flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Volver
                 </button>
-                <div class="text-xs bg-white px-3 py-1 rounded-full border border-slate-200 text-slate-400 font-mono" id="display-id">ID: ---</div>
+                <div class="text-xs bg-white px-3 py-1 rounded border border-slate-200 text-slate-400 font-mono font-bold" id="display-id">ID: ---</div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -287,33 +289,35 @@
                     <!-- Datos -->
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                         <h3 class="font-bold text-lg text-brand-500 mb-4 flex items-center gap-2">
-                            <i class="fas fa-user-md"></i> Datos del Doctor
+                            <i class="fas fa-user-doctor"></i> Datos del Doctor
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input type="text" id="inp-nombre" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Nombre">
                             <input type="text" id="inp-apellidos" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Apellidos">
                             <input type="text" id="inp-clinica" class="col-span-1 md:col-span-2 w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Clínica / Hospital">
                             <input type="email" id="inp-email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-brand-500 focus:bg-white outline-none transition" placeholder="Email">
-                            <input type="text" id="inp-trainer" class="col-span-1 md:col-span-2 w-full p-3 bg-orange-50 border border-orange-200 rounded-lg focus:border-orange-500 focus:bg-white outline-none transition text-orange-900 font-medium" placeholder="Nombre del Certificador / Trainer">
+                            <div class="col-span-1 md:col-span-2 relative">
+                                <label class="absolute -top-2 left-2 bg-white px-1 text-[10px] font-bold text-orange-500 uppercase">Certificador</label>
+                                <input type="text" id="inp-trainer" class="w-full p-3 bg-orange-50 border border-orange-200 rounded-lg focus:border-orange-500 focus:bg-white outline-none transition text-orange-900 font-medium" placeholder="Nombre del Trainer (Aparecerá en el Diploma)">
+                            </div>
                         </div>
                     </div>
 
                     <!-- PASO 1 -->
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                        <div class="flex justify-between items-center mb-4">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 group-hover:w-2 transition-all"></div>
+                        <div class="flex justify-between items-center mb-4 pl-2">
                             <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</span>
                                 Formación Técnica
                             </h3>
-                            <!-- FECHA PASO 1 -->
                             <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold text-slate-400 uppercase">Fecha:</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Fecha:</span>
                                 <input type="date" id="date-step1" class="text-xs border border-slate-200 rounded px-2 py-1 bg-slate-50 focus:border-blue-500 outline-none" onchange="saveLocalData()">
                             </div>
                         </div>
                         
-                        <div class="space-y-3">
+                        <div class="space-y-3 pl-2">
                             <label class="cursor-pointer block">
                                 <input type="checkbox" id="chk-teorica" class="step-checkbox hidden" onchange="updateProgress()">
                                 <div class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-brand-500 transition">
@@ -336,21 +340,20 @@
                     </div>
 
                     <!-- PASO 2 -->
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
-                        <div class="flex justify-between items-center mb-4">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500 group-hover:w-2 transition-all"></div>
+                        <div class="flex justify-between items-center mb-4 pl-2">
                             <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs font-bold">2</span>
                                 Validación Quirúrgica
                             </h3>
-                            <!-- FECHA PASO 2 -->
                             <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold text-slate-400 uppercase">Fecha:</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Fecha:</span>
                                 <input type="date" id="date-step2" class="text-xs border border-slate-200 rounded px-2 py-1 bg-slate-50 focus:border-brand-500 outline-none" onchange="saveLocalData()">
                             </div>
                         </div>
 
-                        <label class="cursor-pointer block">
+                        <label class="cursor-pointer block pl-2">
                             <input type="checkbox" id="chk-quirofano" class="step-checkbox hidden" onchange="updateProgress()">
                             <div class="flex items-center p-4 rounded-xl border border-slate-200 hover:border-brand-500 transition">
                                 <div class="icon-box w-5 h-5 rounded border border-slate-300 mr-3 flex items-center justify-center text-[10px] transition text-transparent">
@@ -371,21 +374,24 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-lg sticky top-24">
                         <div class="mb-6">
                             <p class="text-xs text-slate-400 uppercase font-bold mb-1">Estado Actual</p>
-                            <p id="status-text" class="text-xl font-bold text-slate-700">Borrador</p>
-                            <div class="w-full bg-slate-100 rounded-full h-2 mt-2">
+                            <div class="flex items-center justify-between">
+                                <p id="status-text" class="text-xl font-bold text-slate-700">Borrador</p>
+                                <span id="progress-percent" class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden">
                                 <div id="progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                             </div>
                         </div>
 
                         <div class="space-y-3">
-                            <button onclick="saveAndExit()" class="w-full py-3 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition">
-                                <i class="fas fa-save mr-2"></i> Guardar Cambios
+                            <button onclick="saveAndExit()" class="w-full py-3 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-save"></i> Guardar Cambios
                             </button>
                             <button id="btn-finish" onclick="finalizeProcess()" disabled class="w-full py-3 rounded-lg bg-slate-100 text-slate-400 font-bold text-sm cursor-not-allowed transition flex items-center justify-center gap-2 shadow-inner">
                                 <i class="fas fa-file-pdf"></i> Generar Diploma
                             </button>
                         </div>
-                        <p id="loading-msg" class="hidden text-center text-xs text-brand-500 mt-3 animate-pulse">Procesando...</p>
+                        <p id="loading-msg" class="hidden text-center text-xs text-brand-500 mt-4 animate-pulse font-bold">Generando PDF de alta calidad...</p>
                     </div>
                 </div>
 
@@ -394,125 +400,105 @@
 
     </main>
 
-    <!-- MODAL DE CONFIRMACIÓN Y ENVÍO -->
-    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative animate-modal">
+    <!-- MODAL FINAL -->
+    <div id="success-modal" class="fixed inset-0 bg-slate-900/50 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative modal-content border border-white/20">
             
             <div class="text-center mb-6">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-50">
-                    <i class="fas fa-check text-3xl text-green-600"></i>
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-50 shadow-inner">
+                    <i class="fas fa-check text-2xl text-green-600"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-800">¡Certificación Completada!</h3>
-                <p class="text-slate-500 mt-2 text-sm">El diploma se ha generado correctamente.</p>
+                <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
+                <p class="text-slate-500 mt-2 text-sm">El diploma se ha descargado correctamente.</p>
             </div>
 
-            <!-- Paso 1: SharePoint -->
-            <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4 flex gap-3">
-                <div class="text-blue-500 pt-1"><i class="fas fa-cloud-upload-alt"></i></div>
-                <div class="w-full">
-                    <p class="text-xs font-bold text-blue-700 uppercase mb-1">1. Subir a SharePoint</p>
-                    <p class="text-xs text-blue-900 leading-relaxed mb-3">Sube el PDF descargado a la carpeta: <br><span class="font-mono bg-blue-100 px-1 rounded">CERTIFICACIONES EYECRYL PHAKIC - Inicio</span></p>
-                    <button onclick="openSharePoint()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition flex items-center justify-center gap-2">
-                        <i class="fas fa-external-link-alt"></i> Abrir SharePoint para Subir
-                    </button>
+            <!-- Acciones -->
+            <div class="space-y-3">
+                <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 flex gap-3 items-start">
+                    <i class="fas fa-cloud-upload-alt text-blue-500 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold text-blue-800 uppercase">1. Guardar en SharePoint</p>
+                        <p class="text-[10px] text-blue-600 mb-2">Sube el PDF a la carpeta "CERTIFICACIONES EYECRYL PHAKIC - Inicio"</p>
+                        <button onclick="openSharePoint()" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded transition">Abrir Carpeta</button>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 border border-orange-100 rounded-lg p-3 flex gap-3 items-start">
+                    <i class="fas fa-envelope text-orange-500 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold text-orange-800 uppercase">2. Enviar Email</p>
+                        <p class="text-[10px] text-orange-600 mb-2">Se abrirá tu correo. Adjunta el archivo manualmente.</p>
+                        <button onclick="openMailAndClose()" class="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded transition">Redactar Email</button>
+                    </div>
                 </div>
             </div>
-
-            <!-- Paso 2: Email -->
-            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 mb-6 flex gap-3">
-                <div class="text-orange-500 pt-1"><i class="fas fa-envelope"></i></div>
-                <div>
-                    <p class="text-xs font-bold text-orange-700 uppercase mb-1">2. Enviar al Doctor</p>
-                    <p class="text-xs text-orange-900 leading-relaxed">Pulsa abajo para abrir tu correo. <strong>IMPORTANTE: Adjunta el PDF descargado manualmente.</strong></p>
-                </div>
-            </div>
-
-            <button onclick="openMailAndClose()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-500/30 mb-3 flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5">
-                <i class="fas fa-paper-plane"></i> Redactar Email (Recuerda Adjuntar)
-            </button>
             
-            <button onclick="closeModal()" class="w-full text-slate-400 hover:text-slate-600 text-sm font-medium py-2">
+            <button onclick="closeModal()" class="w-full mt-6 text-slate-400 hover:text-slate-600 text-sm font-bold py-2">
                 Cerrar
             </button>
         </div>
     </div>
 
-    <!-- PDF INVISIBLE -->
+    <!-- AREA PDF (DISEÑO RCOPT PURO CSS) -->
     <div id="pdf-container-wrapper">
         <div id="pdf-hidden-area">
             <div class="cert-container">
-                <!-- Marco exterior -->
-                <div class="cert-border-outer"></div>
-                <!-- Marco interior -->
-                <div class="cert-border-inner"></div>
+                <div class="bg-curve"></div>
                 
-                <div class="cert-content-layer">
-                    
-                    <!-- Header -->
-                    <div class="cert-header">
-                        <h1>Biotech</h1>
-                        <p>Healthcare Vision Division</p>
-                    </div>
-
-                    <!-- Título -->
-                    <div class="cert-title-section">
-                        <h2 class="cert-main-title">Certificate</h2>
-                        <h3 class="cert-sub-title">of Excellence</h3>
-                    </div>
-
-                    <!-- Cuerpo -->
-                    <div class="cert-body">
-                        <p class="cert-text-small">This is to certify that</p>
-                        
-                        <!-- Nombre del Doctor -->
-                        <div id="pdf-name" class="candidate-name-large">Dr. Nombre Apellido</div>
-                        
-                        <p class="cert-text-small">has successfully completed the training and surgical validation for</p>
-                        <p class="cert-product">EYECRYL PHAKIC IOL SYSTEM</p>
-                    </div>
-
-                    <!-- Detalles -->
-                    <div>
-                        <p class="cert-text-small">@ RCOPT 2025, Ireland | Date: <span id="pdf-date">---</span></p>
-                    </div>
-
-                    <!-- Firmas -->
-                    <div class="signatures-section">
-                        <!-- Firma 1 -->
-                        <div class="sig-box">
-                            <span class="sig-text">Carlos Rios</span>
-                            <div class="sig-line"></div>
-                            <div class="sig-name">Carlos Ríos</div>
-                            <div class="sig-role">Global Business Dev. Manager</div>
-                        </div>
-
-                        <!-- Firma Dinámica Trainer -->
-                        <div class="sig-box">
-                            <span class="sig-text" id="pdf-trainer-sig">---</span>
-                            <div class="sig-line"></div>
-                            <div class="sig-name" id="pdf-trainer-name">---</div>
-                            <div class="sig-role">Clinical Trainer</div>
-                        </div>
-
-                        <!-- Firma 3 -->
-                        <div class="sig-box">
-                            <span class="sig-text">D. G. Khalsa</span>
-                            <div class="sig-line"></div>
-                            <div class="sig-name">D. G. Khalsa</div>
-                            <div class="sig-role">Head – Marketing & Clinical Affairs</div>
-                        </div>
-                    </div>
-
+                <div class="cert-header">
+                    <div class="logo-main">biotech</div>
+                    <div class="logo-sub">25 YEARS <span>OF INNOVATION</span></div>
                 </div>
-                
-                <!-- ID -->
-                <div class="cert-footer-id">ID: <span id="pdf-id">---</span></div>
+
+                <div class="cert-content">
+                    <div class="title-block">
+                        <div class="title-exp">EXPERIENCE LAB</div>
+                        <div class="title-cert">CERTIFICATE</div>
+                    </div>
+                    
+                    <div class="body-block">
+                        <p class="text-normal">for successfully completing hands-on training of</p>
+                        <p class="product-name">EYECRYL PHAKIC IOL</p>
+                        
+                        <p class="text-normal">This certificate is awarded to</p>
+                        
+                        <!-- NOMBRE DINÁMICO -->
+                        <div id="pdf-name" class="candidate-name">Dr. Nombre Apellido</div>
+                        
+                        <p class="location-text">@ RCOPT 2025, Ireland on <span id="pdf-date">---</span></p>
+                    </div>
+                </div>
+
+                <!-- Firmas -->
+                <div class="footer-block">
+                    <div class="sig-item">
+                        <div class="sig-image">Carlos Ríos</div>
+                        <div class="sig-name-print">Carlos Ríos</div>
+                        <div class="sig-role">Global Business Dev. Manager</div>
+                    </div>
+                    
+                    <div class="sig-item">
+                        <div class="sig-image">Marta Bautista</div>
+                        <div class="sig-name-print">Marta Bautista</div>
+                        <div class="sig-role">Regional BDM, Iberia</div>
+                    </div>
+
+                    <div class="sig-item">
+                        <div class="sig-image">D. G. Khalsa</div>
+                        <div class="sig-name-print">D. G. Khalsa</div>
+                        <div class="sig-role">Head – Marketing & Clinical Affairs</div>
+                    </div>
+                    
+                    <!-- Firma del Trainer (Opcional, si se quiere incluir se puede añadir aquí) -->
+                </div>
+
+                <div class="id-badge">ID: <span id="pdf-id">---</span></div>
             </div>
         </div>
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v13_fixed';
+        const DB_KEY = 'biotech_cert_v14_final';
         let db = [];
         let currentId = null;
         let currentMailto = "";
@@ -522,7 +508,7 @@
         window.onload = () => {
             const data = localStorage.getItem(DB_KEY);
             if (data) db = JSON.parse(data);
-            renderDashboard();
+            showDashboard(); // Cargar dashboard por defecto
         };
 
         function persist() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
@@ -534,7 +520,10 @@
         }
 
         function createNew() {
-            const id = `EYE-${new Date().getFullYear()}-${Math.floor(Math.random()*10000).toString().padStart(4,'0')}`;
+            const year = new Date().getFullYear();
+            // ID Solo numérico (Ej: 2025-4821)
+            const id = `${year}-${Math.floor(Math.random()*10000).toString().padStart(4,'0')}`;
+            
             const newCert = {
                 id, nombre:'', apellidos:'', clinica:'', email:'', trainer:'',
                 step1_teorica: false, step1_cargado: false,
@@ -568,7 +557,8 @@
             document.getElementById('date-step1').value = cert.dateStep1 || '';
             document.getElementById('date-step2').value = cert.dateStep2 || '';
 
-            const inputs = document.querySelectorAll('#view-editor input[type="text"], #view-editor input[type="email"]');
+            // Listeners
+            const inputs = document.querySelectorAll('#view-editor input');
             inputs.forEach(i => i.oninput = saveLocalData);
             
             updateProgress();
@@ -602,13 +592,15 @@
 
             const btn = document.getElementById('btn-finish');
             const statusText = document.getElementById('status-text');
+            const pctText = document.getElementById('progress-percent');
             const dataComplete = cert.nombre && cert.apellidos && cert.trainer;
 
             document.getElementById('progress-bar').style.width = `${pct}%`;
+            pctText.innerText = `${pct}%`;
 
             if (pct === 100 && dataComplete) {
                 if(cert.status !== 'Finalizada') cert.status = 'Listo para Certificar';
-                statusText.innerText = "Listo para Certificar";
+                statusText.innerText = "Listo";
                 statusText.className = "text-xl font-bold text-brand-500";
                 
                 btn.disabled = false;
@@ -616,7 +608,7 @@
                 btn.classList.add('bg-brand-500', 'hover:bg-brand-600', 'text-white', 'shadow-lg');
             } else {
                 if(cert.status !== 'Finalizada') cert.status = 'En Proceso';
-                statusText.innerText = cert.status;
+                statusText.innerText = "En Proceso";
                 statusText.className = "text-xl font-bold text-slate-700";
                 
                 btn.disabled = true;
@@ -629,7 +621,7 @@
         function saveAndExit() { saveLocalData(); showDashboard(); }
 
         function deleteCert(id) {
-            if(confirm("¿Estás seguro de que deseas eliminar este expediente? Esta acción no se puede deshacer.")) {
+            if(confirm("¿Eliminar registro?")) {
                 db = db.filter(c => c.id !== id);
                 persist();
                 renderDashboard();
@@ -641,7 +633,7 @@
             grid.innerHTML = ''; 
             
             if(!db || db.length === 0) {
-                grid.innerHTML = '<div class="text-center py-12 text-slate-400 bg-white rounded-xl border border-slate-100 shadow-sm"><p>No hay expedientes registrados.</p></div>';
+                grid.innerHTML = '<div class="col-span-1 md:col-span-2 text-center py-12 text-slate-400 bg-white rounded-xl border border-slate-100 shadow-sm"><p>No hay expedientes registrados.</p></div>';
                 return;
             }
             
@@ -654,17 +646,15 @@
                 const statusColor = isDone ? 'text-green-600 bg-green-50 border-green-100' : 'text-orange-500 bg-orange-50 border-orange-100';
                 
                 const card = document.createElement('div');
-                card.className = "bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition cursor-pointer flex justify-between items-center";
+                card.className = "bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition cursor-pointer flex justify-between items-center group";
                 
                 card.onclick = function(e) { 
-                    if (!e.target.closest('.delete-btn')) {
-                        loadEditor(c.id); 
-                    }
+                    if (!e.target.closest('.delete-btn')) { loadEditor(c.id); }
                 };
                 
                 card.innerHTML = `
                     <div>
-                        <h3 class="font-bold text-slate-700">${name}</h3>
+                        <h3 class="font-bold text-slate-700 group-hover:text-brand-500 transition">${name}</h3>
                         <p class="text-xs text-slate-400 font-mono mt-1">${c.id} ${trainer}</p>
                     </div>
                     <div class="flex items-center gap-4">
@@ -679,6 +669,7 @@
             });
         }
 
+        // --- PDF GENERATION ---
         function finalizeProcess() {
             const cert = db.find(c => c.id === currentId);
             cert.status = 'Finalizada';
@@ -689,60 +680,47 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin animate-spin"></i> Generando...';
             document.getElementById('loading-msg').classList.remove('hidden');
 
-            const wrapper = document.getElementById('pdf-container-wrapper');
-            wrapper.style.visibility = 'visible'; 
-
             document.getElementById('pdf-name').innerText = `Dr. ${cert.nombre} ${cert.apellidos}`;
             document.getElementById('pdf-id').innerText = cert.id;
             
+            // Fecha prioritaria: Paso 2, sino Actual
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
             document.getElementById('pdf-date').innerText = finalDate;
-            
-            const trainerName = cert.trainer || "Biotech Team";
-            document.getElementById('pdf-trainer-sig').innerText = trainerName;
-            document.getElementById('pdf-trainer-name').innerText = trainerName;
 
             const element = document.getElementById('pdf-hidden-area');
             const filename = `Certificado_${cert.apellidos}_${cert.id}.pdf`;
             
+            // Configuración PDF Alta Calidad
             const opt = { 
                 margin: 0, 
                 filename: filename, 
                 image: { type: 'jpeg', quality: 1 }, 
                 html2canvas: { 
-                    scale: 2, 
+                    scale: 3, // Aumentamos escala para nitidez
                     useCORS: true,
                     windowWidth: 1123,
-                    windowHeight: 794,
-                    scrollX: 0,
-                    scrollY: 0
+                    windowHeight: 794
                 }, 
                 jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape' } 
             };
 
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
-                    wrapper.style.visibility = 'hidden'; 
                     btn.innerHTML = originalText;
                     document.getElementById('loading-msg').classList.add('hidden');
                     
+                    // Preparar mail
                     const subject = encodeURIComponent(`Certificación Eyecryl Phakic - ${cert.nombre} ${cert.apellidos}`);
                     const body = encodeURIComponent(`Estimado/a Dr/a. ${cert.apellidos},\n\nAdjunto encontrará su certificado de finalización del curso Eyecryl Phakic.\n\nID de Certificación: ${cert.id}\nTrainer: ${cert.trainer}\n\nAtentamente,\nBiotech Healthcare`);
                     currentMailto = `mailto:${cert.email}?cc=ly.garcia@biotechhealthcare.com&subject=${subject}&body=${body}`;
 
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
-            }, 500);
+            }, 800); // Pausa para renderizado seguro
         }
 
-        function openMailAndClose() {
-            window.location.href = currentMailto;
-        }
-
-        function openSharePoint() {
-            window.open(SHAREPOINT_URL, '_blank');
-        }
-
+        function openMailAndClose() { window.location.href = currentMailto; }
+        function openSharePoint() { window.open(SHAREPOINT_URL, '_blank'); }
         function closeModal() {
             document.getElementById('success-modal').classList.add('hidden');
             showDashboard();
