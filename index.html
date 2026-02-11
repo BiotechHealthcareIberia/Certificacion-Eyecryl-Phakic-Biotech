@@ -15,7 +15,7 @@
     <!-- FUENTES TIPOGRÁFICAS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Great+Vibes&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Great+Vibes&family=Cinzel:wght@400;700&family=Pinyon+Script&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -29,6 +29,7 @@
                         sans: ['"Montserrat"', 'sans-serif'],
                         serif: ['"Cinzel"', 'serif'],
                         script: ['"Great Vibes"', 'cursive'],
+                        elegant: ['"Pinyon Script"', 'cursive'],
                     }
                 }
             }
@@ -50,7 +51,7 @@
             -webkit-print-color-adjust: exact; print-color-adjust: exact;
         }
 
-        /* DISEÑO DIPLOMA */
+        /* DISEÑO DIPLOMA (RCOPT STYLE) */
         .cert-wrapper {
             width: 100%; height: 100%; position: relative; background: #ffffff;
             padding: 40px 60px; display: flex; flex-direction: column;
@@ -72,18 +73,13 @@
         .cert-body { text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .txt-normal { font-family: 'Montserrat', sans-serif; font-size: 18px; color: #555; margin: 5px 0; }
         .txt-product { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; color: #005f63; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* NOMBRE DEL DOCTOR */
         .txt-candidate {
-            font-family: 'Great Vibes', cursive; 
-            font-size: 100px; 
-            color: #005f63;
+            font-family: 'Great Vibes', cursive; font-size: 100px; color: #005f63;
             line-height: 1.2; margin: 10px auto 20px auto; padding: 0 40px;
             border-bottom: 1px solid #e5e5e5; display: inline-block; min-width: 600px;
             text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
-            text-transform: none !important; /* Forzar minúsculas/mayúsculas naturales */
+            text-transform: none !important; /* Importante para respetar mayúsculas/minúsculas */
         }
-        
         .txt-details { font-family: 'Montserrat', sans-serif; font-size: 15px; color: #666; margin-bottom: 5px; font-weight: 500; }
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 0 20px; z-index: 10; }
         .sig-col { text-align: center; width: 240px; }
@@ -261,9 +257,9 @@
         </div>
     </main>
 
-    <!-- AREA PDF (RENDERIZADO PERSISTENTE) -->
-    <div id="pdf-generator-wrapper">
-        <div id="pdf-node">
+    <!-- AREA PDF (RENDERIZADO PERSISTENTE - OVERLAY) -->
+    <div id="pdf-overlay-container">
+        <div id="pdf-capture-node">
             <div class="cert-wrapper">
                 <div class="cert-bg"></div>
                 
@@ -324,7 +320,7 @@
         </div>
     </div>
 
-    <!-- MODAL FINAL -->
+    <!-- MODAL FINAL (SIMPLE) -->
     <div id="success-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative modal-content border border-white/20">
             <div class="text-center mb-6">
@@ -334,8 +330,7 @@
                 <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
                 <p class="text-sm text-slate-500 mt-2">El diploma se ha generado correctamente.</p>
             </div>
-
-            <!-- Botón solo cerrar -->
+            <!-- Botón cerrar -->
             <button onclick="closeModal()" class="w-full mt-2 bg-slate-800 text-white hover:bg-slate-700 text-sm font-bold py-3 rounded transition shadow-lg">
                 Cerrar
             </button>
@@ -403,9 +398,12 @@
             updateProgress();
         }
 
+        // FUNCIÓN CLAVE PARA CAPITALIZAR (Juan Perez)
         function toTitleCase(str) {
             if(!str) return '';
-            return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            return str.toLowerCase().split(' ').map(function(word) {
+                return (word.charAt(0).toUpperCase() + word.slice(1));
+            }).join(' ');
         }
 
         function saveLocalData() {
@@ -573,3 +571,4 @@
     </script>
 </body>
 </html>
+
