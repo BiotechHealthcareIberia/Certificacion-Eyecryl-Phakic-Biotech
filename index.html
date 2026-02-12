@@ -42,65 +42,57 @@
         .step-checkbox:checked + div { border-color: #005f63; background-color: #f0fdfa; }
         .step-checkbox:checked + div .icon-box { background-color: #005f63; border-color: #005f63; color: white; }
 
-        /* --- PLANTILLA DEL DIPLOMA (OCULTA) --- */
-        /* Esta es la "plantilla" base. JS la clonará para imprimirla */
-        #pdf-template-source {
-            display: none; /* Oculto, solo sirve de molde */
-        }
-
-        /* Clases para el clon visible durante la impresión */
-        .printing-mode {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            z-index: 99999 !important;
-            width: 1123px !important;
-            height: 794px !important;
-            background: white !important;
-            visibility: visible !important;
-            display: block !important;
+        /* --- CONTENEDOR PDF BASE (PLANTILLA OCULTA) --- */
+        #pdf-template-container {
+            display: none; /* Se mantiene oculto, usaremos un clon */
         }
 
         /* --- DISEÑO DIPLOMA (RCOPT STYLE) --- */
         .cert-wrapper {
-            width: 1123px; height: 794px; /* Dimensiones fijas A4 Landscape */
-            position: relative;
+            width: 1123px; 
+            height: 794px; 
+            position: relative; 
             background: #ffffff;
-            padding: 40px 60px;
-            display: flex;
+            padding: 40px 60px; 
+            display: flex; 
             flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
+            justify-content: space-between; 
+            overflow: hidden; 
             box-sizing: border-box;
             border: 1px solid #f0f0f0;
         }
-        
+
+        /* Gráfico de fondo */
         .cert-bg {
             position: absolute; top: -40%; right: -25%; width: 900px; height: 900px;
             background: radial-gradient(circle, rgba(0,95,99,0.06) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
-        
+
+        /* Header */
         .cert-header { text-align: center; z-index: 10; margin-top: 20px; }
         .brand-logo { font-family: 'Montserrat', sans-serif; font-size: 55px; font-weight: 800; color: #005f63; letter-spacing: -2px; line-height: 1; }
         .brand-tagline { font-family: 'Great Vibes', cursive; color: #C5A059; font-size: 38px; margin-top: -15px; line-height: 1; }
         .brand-sub { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #444; position: relative; top: -5px; font-weight: 600; }
         
+        /* Títulos */
         .cert-titles { text-align: center; z-index: 10; margin-top: 30px; }
         .txt-exp { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 24px; letter-spacing: 8px; text-transform: uppercase; color: #666; }
         .txt-cert { font-family: 'Cinzel', serif; font-weight: 700; font-size: 60px; letter-spacing: 4px; text-transform: uppercase; color: #000; line-height: 1.1; margin-top: 5px; }
         
+        /* Cuerpo */
         .cert-body { text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .txt-normal { font-family: 'Montserrat', sans-serif; font-size: 18px; color: #555; margin: 5px 0; }
         .txt-product { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; color: #005f63; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* NOMBRE DOCTOR: Mayúscula inicial, resto minúscula */
+        /* Nombre Doctor */
         .txt-candidate {
             font-family: 'Great Vibes', cursive; 
             font-size: 100px; 
             color: #005f63;
             line-height: 1.2; margin: 10px auto 20px auto; padding: 0 40px;
             border-bottom: 1px solid #e5e5e5; display: inline-block; min-width: 600px;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
             text-transform: none !important; 
         }
         
@@ -108,6 +100,7 @@
         .txt-trainer-block { font-family: 'Montserrat', sans-serif; font-size: 14px; color: #444; margin-bottom: 5px; }
         .trainer-name { color: #005f63; font-weight: 700; text-transform: uppercase; }
 
+        /* Firmas */
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 0 20px; z-index: 10; }
         .sig-col { text-align: center; width: 240px; }
         .sig-fake { font-family: 'Great Vibes', cursive; font-size: 32px; color: #005f63; height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px; }
@@ -284,26 +277,23 @@
         </div>
     </main>
 
-    <!-- PLANTILLA PDF (OCULTA POR DEFECTO) -->
-    <div id="pdf-template-source">
+    <!-- AREA PDF (PLANTILLA BASE PARA CLONAR) -->
+    <div id="pdf-template-container">
         <div id="pdf-capture-node">
             <div class="cert-wrapper">
                 <div class="cert-bg"></div>
                 
-                <!-- HEADER -->
                 <div class="cert-header">
                     <div class="brand-logo">biotech</div>
                     <div class="brand-tagline">25 Years</div>
                     <div class="brand-sub">OF INNOVATION</div>
                 </div>
 
-                <!-- TITULO -->
                 <div class="cert-titles">
                     <div class="txt-exp">EXPERIENCE LAB</div>
                     <div class="txt-cert">CERTIFICATE</div>
                 </div>
 
-                <!-- BODY -->
                 <div class="cert-body">
                     <p class="txt-normal">for successfully completing hands-on training of</p>
                     <p class="txt-product">EYECRYL PHAKIC IOL</p>
@@ -322,7 +312,6 @@
                     </div>
                 </div>
 
-                <!-- FOOTER: FIRMAS -->
                 <div class="cert-footer">
                     <div class="sig-col">
                         <div class="sig-fake">Carlos Ríos</div>
@@ -359,9 +348,8 @@
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
                     <i class="fas fa-check"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800">¡Diploma Generado!</h3>
-                <p class="text-sm text-slate-500 mt-2">El certificado se ha generado y descargado correctamente.</p>
-                <p class="text-xs text-slate-400 mt-1">Busca el archivo en tu carpeta de descargas.</p>
+                <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
+                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente.</p>
             </div>
             
             <button onclick="closeModal()" class="w-full mt-4 bg-slate-800 text-white hover:bg-slate-700 text-sm font-bold py-3 rounded transition shadow-lg">
@@ -371,7 +359,7 @@
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v9_clean';
+        const DB_KEY = 'biotech_cert_v_final_cloning';
         let db = [];
         let currentId = null;
 
@@ -549,7 +537,7 @@
             });
         }
 
-        // --- GENERACIÓN PDF (Técnica Clonación DOM) ---
+        // --- GENERACIÓN PDF (TÉCNICA CLONACIÓN SEGURA) ---
         function finalizeProcess() {
             const cert = db.find(c => c.id === currentId);
             cert.status = 'Finalizada';
@@ -558,13 +546,15 @@
             const btn = document.getElementById('btn-finish');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin animate-spin"></i> Generando...';
 
-            // 1. CLONAR
-            const source = document.getElementById('pdf-capture-node');
-            const clone = source.cloneNode(true);
-            clone.classList.add('printing-mode'); // Aplicar estilos fijos
+            // 1. CLONAR LA PLANTILLA
+            const template = document.getElementById('pdf-capture-node');
+            const clone = template.cloneNode(true);
+
+            // 2. HACER EL CLON VISIBLE Y FIJO (Encima de todo)
+            clone.classList.add('print-visible');
             document.body.appendChild(clone);
 
-            // 2. INYECTAR DATOS EN EL CLON
+            // 3. INYECTAR DATOS EN EL CLON
             const formattedName = `${cert.prefix} ${toTitleCase(cert.nombre)} ${toTitleCase(cert.apellidos)}`;
             clone.querySelector('#pdf-name').innerText = formattedName;
             clone.querySelector('#pdf-id').innerText = cert.id;
@@ -577,29 +567,26 @@
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
             clone.querySelector('#pdf-date').innerText = finalDate;
 
-            // 3. GENERAR
+            // 4. GENERAR PDF
             const filename = `Certificado_${cert.apellidos}_${cert.id}.pdf`;
+            
             const opt = { 
                 margin: 0, 
                 filename: filename, 
                 image: { type: 'jpeg', quality: 1 }, 
-                html2canvas: { 
-                    scale: 3, 
-                    useCORS: true,
-                    scrollX: 0, scrollY: 0,
-                    windowWidth: 1123, windowHeight: 794
-                }, 
+                html2canvas: { scale: 3, useCORS: true, scrollX: 0, scrollY: 0 }, 
                 jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape' } 
             };
 
-            // Pequeño timeout para asegurar que el clon se renderizó
             setTimeout(() => {
                 html2pdf().set(opt).from(clone).save().then(() => {
-                    document.body.removeChild(clone); // Limpiar
+                    // 5. LIMPIAR
+                    document.body.removeChild(clone); 
                     btn.innerHTML = '<i class="fas fa-award"></i> Generar Diploma';
+                    
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
-            }, 800);
+            }, 500);
         }
 
         function closeModal() {
