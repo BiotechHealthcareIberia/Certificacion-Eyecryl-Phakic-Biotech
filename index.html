@@ -42,50 +42,66 @@
         .step-checkbox:checked + div { border-color: #005f63; background-color: #f0fdfa; }
         .step-checkbox:checked + div .icon-box { background-color: #005f63; border-color: #005f63; color: white; }
 
-        /* --- CONTENEDOR PDF BASE (PLANTILLA OCULTA) --- */
-        #pdf-template-container {
-            display: none; /* Se mantiene oculto, usaremos un clon */
+        /* CONTENEDOR PDF (Overlay visible temporalmente para captura correcta) */
+        #pdf-overlay-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(255,255,255,1);
+            z-index: 9999;
+            display: none; /* Se activa con JS */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        /* --- DISEÑO DIPLOMA (RCOPT STYLE) --- */
-        .cert-wrapper {
+        .generating-msg {
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #333;
+            font-size: 18px;
+            animation: pulse 1s infinite;
+        }
+
+        /* Lienzo exacto A4 Landscape */
+        #pdf-capture-node {
             width: 1123px; 
-            height: 794px; 
-            position: relative; 
-            background: #ffffff;
-            padding: 40px 60px; 
-            display: flex; 
-            flex-direction: column;
-            justify-content: space-between; 
-            overflow: hidden; 
-            box-sizing: border-box;
+            height: 794px;
+            background: white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+            /* Forzar impresión de colores de fondo */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* DISEÑO DIPLOMA (RCOPT STYLE) */
+        .cert-wrapper {
+            width: 100%; height: 100%; position: relative; background: #ffffff;
+            padding: 40px 60px; display: flex; flex-direction: column;
+            justify-content: space-between; overflow: hidden; box-sizing: border-box;
             border: 1px solid #f0f0f0;
         }
-
-        /* Gráfico de fondo */
         .cert-bg {
             position: absolute; top: -40%; right: -25%; width: 900px; height: 900px;
             background: radial-gradient(circle, rgba(0,95,99,0.06) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
-
-        /* Header */
         .cert-header { text-align: center; z-index: 10; margin-top: 20px; }
         .brand-logo { font-family: 'Montserrat', sans-serif; font-size: 55px; font-weight: 800; color: #005f63; letter-spacing: -2px; line-height: 1; }
         .brand-tagline { font-family: 'Great Vibes', cursive; color: #C5A059; font-size: 38px; margin-top: -15px; line-height: 1; }
         .brand-sub { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #444; position: relative; top: -5px; font-weight: 600; }
         
-        /* Títulos */
         .cert-titles { text-align: center; z-index: 10; margin-top: 30px; }
         .txt-exp { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 24px; letter-spacing: 8px; text-transform: uppercase; color: #666; }
         .txt-cert { font-family: 'Cinzel', serif; font-weight: 700; font-size: 60px; letter-spacing: 4px; text-transform: uppercase; color: #000; line-height: 1.1; margin-top: 5px; }
         
-        /* Cuerpo */
         .cert-body { text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .txt-normal { font-family: 'Montserrat', sans-serif; font-size: 18px; color: #555; margin: 5px 0; }
         .txt-product { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; color: #005f63; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Nombre Doctor */
+        /* NOMBRE DOCTOR: Mayúscula inicial, resto minúscula (Title Case) */
         .txt-candidate {
             font-family: 'Great Vibes', cursive; 
             font-size: 100px; 
@@ -97,10 +113,8 @@
         }
         
         .txt-details { font-family: 'Montserrat', sans-serif; font-size: 15px; color: #666; margin-bottom: 5px; font-weight: 500; }
-        .txt-trainer-block { font-family: 'Montserrat', sans-serif; font-size: 14px; color: #444; margin-bottom: 5px; }
-        .trainer-name { color: #005f63; font-weight: 700; text-transform: uppercase; }
-
-        /* Firmas */
+        /* .txt-trainer-block eliminado para evitar duplicidad */
+        
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 0 20px; z-index: 10; }
         .sig-col { text-align: center; width: 240px; }
         .sig-fake { font-family: 'Great Vibes', cursive; font-size: 32px; color: #005f63; height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px; }
@@ -112,6 +126,7 @@
         /* Modal Anim */
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .animate-modal { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="min-h-screen text-slate-800 font-sans relative overflow-x-hidden">
@@ -277,23 +292,26 @@
         </div>
     </main>
 
-    <!-- AREA PDF (PLANTILLA BASE PARA CLONAR) -->
-    <div id="pdf-template-container">
+    <!-- AREA PDF (OVERLAY VISIBLE) -->
+    <div id="pdf-overlay-container">
         <div id="pdf-capture-node">
             <div class="cert-wrapper">
                 <div class="cert-bg"></div>
                 
+                <!-- HEADER -->
                 <div class="cert-header">
                     <div class="brand-logo">biotech</div>
                     <div class="brand-tagline">25 Years</div>
                     <div class="brand-sub">OF INNOVATION</div>
                 </div>
 
+                <!-- TITULO -->
                 <div class="cert-titles">
                     <div class="txt-exp">EXPERIENCE LAB</div>
                     <div class="txt-cert">CERTIFICATE</div>
                 </div>
 
+                <!-- BODY -->
                 <div class="cert-body">
                     <p class="txt-normal">for successfully completing hands-on training of</p>
                     <p class="txt-product">EYECRYL PHAKIC IOL</p>
@@ -302,16 +320,12 @@
                     <!-- DATO DINÁMICO: DOCTOR -->
                     <div id="pdf-name" class="txt-candidate">Dr. Name Surname</div>
                     
-                    <!-- TRAINER -->
-                    <div class="txt-trainer-block">
-                        Certified by: <span id="pdf-trainer-name" class="trainer-name">---</span>
-                    </div>
-
                     <div class="txt-details">
                         @ RCOPT 2025, Ireland on <span id="pdf-date" style="font-weight:bold;">---</span>
                     </div>
                 </div>
 
+                <!-- FOOTER: FIRMAS -->
                 <div class="cert-footer">
                     <div class="sig-col">
                         <div class="sig-fake">Carlos Ríos</div>
@@ -338,6 +352,8 @@
 
                 <div class="cert-id">ID: <span id="pdf-id">---</span></div>
             </div>
+            
+            <div class="generating-msg">Generando Diploma, por favor espere...</div>
         </div>
     </div>
 
@@ -349,7 +365,7 @@
                     <i class="fas fa-check"></i>
                 </div>
                 <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
-                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente.</p>
+                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente en tu ordenador.</p>
             </div>
             
             <button onclick="closeModal()" class="w-full mt-4 bg-slate-800 text-white hover:bg-slate-700 text-sm font-bold py-3 rounded transition shadow-lg">
@@ -359,7 +375,7 @@
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v_final_cloning';
+        const DB_KEY = 'biotech_cert_v56_final_no_duplicate';
         let db = [];
         let currentId = null;
 
@@ -537,7 +553,7 @@
             });
         }
 
-        // --- GENERACIÓN PDF (TÉCNICA CLONACIÓN SEGURA) ---
+        // --- GENERACIÓN PDF (OVERLAY VISIBLE) ---
         function finalizeProcess() {
             const cert = db.find(c => c.id === currentId);
             cert.status = 'Finalizada';
@@ -546,28 +562,26 @@
             const btn = document.getElementById('btn-finish');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin animate-spin"></i> Generando...';
 
-            // 1. CLONAR LA PLANTILLA
-            const template = document.getElementById('pdf-capture-node');
-            const clone = template.cloneNode(true);
-
-            // 2. HACER EL CLON VISIBLE Y FIJO (Encima de todo)
-            clone.classList.add('print-visible');
-            document.body.appendChild(clone);
-
-            // 3. INYECTAR DATOS EN EL CLON
+            // Formatear Nombre (Title Case)
             const formattedName = `${cert.prefix} ${toTitleCase(cert.nombre)} ${toTitleCase(cert.apellidos)}`;
-            clone.querySelector('#pdf-name').innerText = formattedName;
-            clone.querySelector('#pdf-id').innerText = cert.id;
+            document.getElementById('pdf-name').innerText = formattedName;
+            
+            document.getElementById('pdf-id').innerText = cert.id;
             
             const trainerFormatted = toTitleCase(cert.trainer);
-            clone.querySelector('#pdf-trainer-sig').innerText = trainerFormatted;
-            clone.querySelector('#pdf-trainer-name').innerText = trainerFormatted;
-            clone.querySelector('#pdf-trainer-name-sig').innerText = trainerFormatted;
+            
+            // Inyectar Trainer solo en firma central y footer
+            document.getElementById('pdf-trainer-sig').innerText = trainerFormatted;
+            document.getElementById('pdf-trainer-name-sig').innerText = trainerFormatted;
             
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
-            clone.querySelector('#pdf-date').innerText = finalDate;
+            document.getElementById('pdf-date').innerText = finalDate;
 
-            // 4. GENERAR PDF
+            // Mostrar Overlay (CRÍTICO)
+            const overlay = document.getElementById('pdf-overlay-container');
+            overlay.style.display = 'flex';
+
+            const element = document.getElementById('pdf-capture-node');
             const filename = `Certificado_${cert.apellidos}_${cert.id}.pdf`;
             
             const opt = { 
@@ -579,14 +593,12 @@
             };
 
             setTimeout(() => {
-                html2pdf().set(opt).from(clone).save().then(() => {
-                    // 5. LIMPIAR
-                    document.body.removeChild(clone); 
+                html2pdf().set(opt).from(element).save().then(() => {
+                    overlay.style.display = 'none'; // Ocultar Overlay
                     btn.innerHTML = '<i class="fas fa-award"></i> Generar Diploma';
-                    
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
-            }, 500);
+            }, 1000);
         }
 
         function closeModal() {
