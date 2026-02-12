@@ -84,62 +84,29 @@
         .brand-logo { font-family: 'Montserrat', sans-serif; font-size: 55px; font-weight: 800; color: #005f63; letter-spacing: -2px; line-height: 1; }
         .brand-tagline { font-family: 'Great Vibes', cursive; color: #C5A059; font-size: 38px; margin-top: -15px; line-height: 1; }
         .brand-sub { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #444; position: relative; top: -5px; font-weight: 600; }
-        
         .cert-titles { text-align: center; z-index: 10; margin-top: 30px; }
         .txt-exp { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 24px; letter-spacing: 8px; text-transform: uppercase; color: #666; }
         .txt-cert { font-family: 'Cinzel', serif; font-weight: 700; font-size: 60px; letter-spacing: 4px; text-transform: uppercase; color: #000; line-height: 1.1; margin-top: 5px; }
-        
         .cert-body { text-align: center; z-index: 10; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .txt-normal { font-family: 'Montserrat', sans-serif; font-size: 18px; color: #555; margin: 5px 0; }
         .txt-product { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; color: #005f63; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-        
         .txt-candidate {
-            font-family: 'Great Vibes', cursive; 
-            font-size: 100px; color: #005f63;
+            font-family: 'Great Vibes', cursive; font-size: 100px; color: #005f63;
             line-height: 1.2; margin: 10px auto 20px auto; padding: 0 40px;
             border-bottom: 1px solid #e5e5e5; display: inline-block; min-width: 600px;
-            text-transform: none !important; 
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.05); text-transform: none !important;
         }
-        
-        .txt-trainer-block { 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 13px; 
-            color: #444; 
-            margin-bottom: 5px; 
-            margin-top: 10px;
-        }
-        .trainer-name { 
-            color: #005f63; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-        }
-
-        .txt-details { 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 14px; 
-            color: #666; 
-            margin-bottom: 5px; 
-            font-weight: 500; 
-        }
-        
-        /* FOOTER REDISTRIBUIDO: 2 Firmas centradas */
-        .cert-footer { 
-            display: flex; 
-            justify-content: space-around; /* Redistribuir espacio */
-            align-items: flex-end; 
-            margin-top: 40px; 
-            padding: 0 100px; /* Margen lateral aumentado para centrar */
-            z-index: 10; 
-        }
-        .sig-col { text-align: center; width: 260px; }
+        .txt-details { font-family: 'Montserrat', sans-serif; font-size: 15px; color: #666; margin-bottom: 5px; font-weight: 500; }
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 0 20px; z-index: 10; }
+        .sig-col { text-align: center; width: 240px; }
         .sig-fake { font-family: 'Great Vibes', cursive; font-size: 32px; color: #005f63; height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px; }
         .sig-line { border-top: 1px solid #999; margin: 5px 0; }
         .sig-name { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: #222; text-transform: uppercase; }
         .sig-role { font-family: 'Montserrat', sans-serif; font-size: 10px; text-transform: uppercase; color: #666; letter-spacing: 0.5px; line-height: 1.2; }
+        .cert-id { position: absolute; bottom: 25px; right: 25px; font-family: monospace; font-size: 11px; color: #aaa; }
         
-        .cert-id { position: absolute; bottom: 20px; right: 25px; font-family: monospace; font-size: 11px; color: #aaa; }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .animate-modal { animation: fadeIn 0.2s ease-out forwards; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
@@ -312,40 +279,36 @@
             <div class="cert-wrapper">
                 <div class="cert-bg"></div>
                 
-                <!-- HEADER -->
                 <div class="cert-header">
                     <div class="brand-logo">biotech</div>
                     <div class="brand-tagline">25 Years</div>
                     <div class="brand-sub">OF INNOVATION</div>
                 </div>
 
-                <!-- TITULO -->
                 <div class="cert-titles">
                     <div class="txt-exp">EXPERIENCE LAB</div>
                     <div class="txt-cert">CERTIFICATE</div>
                 </div>
 
-                <!-- BODY -->
                 <div class="cert-body">
                     <p class="txt-normal">for successfully completing hands-on training of</p>
                     <p class="txt-product">EYECRYL PHAKIC IOL</p>
                     <p class="txt-normal">This certificate is awarded to</p>
                     
-                    <!-- DATO DINÁMICO: DOCTOR -->
+                    <!-- NOMBRE DINÁMICO -->
                     <div id="pdf-name" class="txt-candidate">Dr. Name Surname</div>
                     
-                    <!-- TRAINER RESTAURADO EN CUERPO -->
-                    <div class="txt-trainer-block">
-                        Certified by: <span id="pdf-trainer-name" class="trainer-name">---</span>
+                    <!-- CERTIFIED BY -->
+                    <div style="margin-bottom: 5px;">
+                         <p class="txt-details" style="margin-bottom: 2px;">Certified by: <span id="pdf-trainer-text" style="font-weight: 700; color: #005f63; text-transform: uppercase;">TRAINER NAME</span></p>
                     </div>
 
-                    <!-- UBICACIÓN DINÁMICA (Año y País) -->
                     <div class="txt-details">
                         @ RCOPT <span id="pdf-year"></span>, Spain on <span id="pdf-date" style="font-weight:bold;">---</span>
                     </div>
                 </div>
 
-                <!-- FOOTER: FIRMAS (2 COLUMNAS) -->
+                <!-- FOOTER -->
                 <div class="cert-footer">
                     <!-- Carlos Ríos -->
                     <div class="sig-col">
@@ -354,7 +317,7 @@
                         <div class="sig-name">Carlos Ríos</div>
                         <div class="sig-role">Global Business Dev. Manager</div>
                     </div>
-
+                    
                     <!-- D. G. Khalsa -->
                     <div class="sig-col">
                         <div class="sig-fake">D. G. Khalsa</div>
@@ -371,27 +334,37 @@
         </div>
     </div>
 
-    <!-- MODAL FINAL (SOLO CONFIRMACIÓN) -->
+    <!-- MODAL FINAL (CON EMAIL) -->
     <div id="success-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full relative modal-content border border-white/20">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
                     <i class="fas fa-check"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
-                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente.</p>
+                <h3 class="text-xl font-bold text-slate-800">¡Felicidades!</h3>
+                <p class="text-sm text-slate-500 mt-2">La certificación se ha completado y el diploma se ha descargado.</p>
             </div>
             
-            <button onclick="closeModal()" class="w-full mt-4 bg-slate-800 text-white hover:bg-slate-700 text-sm font-bold py-3 rounded transition shadow-lg">
+            <!-- Botón de Email -->
+             <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 mb-4">
+                <p class="text-xs font-bold text-orange-800 uppercase mb-2 text-center">Acción Recomendada</p>
+                <button onclick="openMailAndClose()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center gap-2">
+                    <i class="fas fa-envelope"></i> Enviar Felicitación por Email
+                </button>
+                <p class="text-[10px] text-orange-600 text-center mt-2">Se abrirá tu correo. Recuerda <strong>adjuntar el PDF</strong> manualmente.</p>
+            </div>
+
+            <button onclick="closeModal()" class="w-full mt-2 text-slate-400 hover:text-slate-600 text-sm font-bold py-2">
                 Cerrar
             </button>
         </div>
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v58_final_layout_clean';
+        const DB_KEY = 'biotech_cert_final_v55_email_happy';
         let db = [];
         let currentId = null;
+        let currentMailto = "";
 
         window.onload = () => {
             const data = localStorage.getItem(DB_KEY);
@@ -567,7 +540,7 @@
             });
         }
 
-        // --- GENERACIÓN PDF (OVERLAY VISIBLE) ---
+        // --- GENERACIÓN PDF ---
         function finalizeProcess() {
             const cert = db.find(c => c.id === currentId);
             cert.status = 'Finalizada';
@@ -576,15 +549,13 @@
             const btn = document.getElementById('btn-finish');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin animate-spin"></i> Generando...';
 
-            // Formatear Nombre (Title Case)
+            // Datos
             const formattedName = `${cert.prefix} ${toTitleCase(cert.nombre)} ${toTitleCase(cert.apellidos)}`;
             document.getElementById('pdf-name').innerText = formattedName;
-            
             document.getElementById('pdf-id').innerText = cert.id;
             
-            // Trainer y Fecha (Año dinámico)
             const trainerFormatted = toTitleCase(cert.trainer);
-            document.getElementById('pdf-trainer-name').innerText = trainerFormatted;
+            document.getElementById('pdf-trainer-text').innerText = trainerFormatted;
             
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
             const finalYear = cert.dateStep2 ? new Date(cert.dateStep2).getFullYear() : new Date().getFullYear();
@@ -592,7 +563,7 @@
             document.getElementById('pdf-year').innerText = finalYear;
             document.getElementById('pdf-date').innerText = finalDate;
 
-            // Mostrar Overlay (CRÍTICO)
+            // Overlay
             const overlay = document.getElementById('pdf-overlay-container');
             overlay.style.display = 'flex';
 
@@ -609,11 +580,30 @@
 
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
-                    overlay.style.display = 'none'; // Ocultar Overlay
+                    overlay.style.display = 'none';
                     btn.innerHTML = '<i class="fas fa-award"></i> Generar Diploma';
+                    
+                    // PREPARAR EMAIL ALEGRE
+                    const subject = encodeURIComponent(`¡Felicidades Dr/a. ${toTitleCase(cert.apellidos)}! Ya eres Implantador Certificado Eyecryl Phakic 🎉`);
+                    const bodyText = `Hola ${formattedName},\n\n` +
+                        `¡Qué alegría saludarte!\n\n` +
+                        `Nos hace muchísima ilusión confirmarte que has superado con éxito todo el proceso de formación y validación quirúrgica.\n` +
+                        `¡Ya eres oficialmente Implantador Certificado de lentes Eyecryl Phakic! 🎓👁️\n\n` +
+                        `Adjunto a este correo encontrarás tu diploma oficial que acredita tu excelencia en la técnica.\n\n` +
+                        `Estamos encantados de contar contigo en este grupo de expertos. ¡Te deseamos muchísimos éxitos con tus pacientes!\n\n` +
+                        `Un fuerte abrazo,\n` +
+                        `El equipo de Biotech Healthcare`;
+                        
+                    const body = encodeURIComponent(bodyText);
+                    currentMailto = `mailto:${cert.email}?cc=ly.garcia@biotechhealthcare.com&subject=${subject}&body=${body}`;
+
                     document.getElementById('success-modal').classList.remove('hidden');
                 });
             }, 1000);
+        }
+
+        function openMailAndClose() {
+            window.location.href = currentMailto;
         }
 
         function closeModal() {
