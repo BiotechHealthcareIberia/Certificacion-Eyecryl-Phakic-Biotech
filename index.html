@@ -42,41 +42,33 @@
         .step-checkbox:checked + div { border-color: #005f63; background-color: #f0fdfa; }
         .step-checkbox:checked + div .icon-box { background-color: #005f63; border-color: #005f63; color: white; }
 
-        /* CONTENEDOR PDF (Overlay visible temporalmente para captura correcta) */
+        /* CONTENEDOR PDF (Overlay) */
         #pdf-overlay-container {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             background: rgba(255,255,255,1);
             z-index: 9999;
-            display: none; /* Se activa con JS */
+            display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
 
         .generating-msg {
-            margin-top: 20px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            color: #333;
-            font-size: 18px;
-            animation: pulse 1s infinite;
+            margin-top: 20px; font-family: 'Montserrat', sans-serif; font-weight: 600; color: #333; font-size: 18px; animation: pulse 1s infinite;
         }
 
-        /* Lienzo exacto A4 Landscape */
         #pdf-capture-node {
-            width: 1123px; 
-            height: 794px;
+            width: 1123px; height: 794px;
             background: white;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
             flex-shrink: 0;
-            /* Forzar impresión de colores de fondo */
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
 
-        /* DISEÑO DIPLOMA (RCOPT STYLE) */
+        /* DISEÑO DIPLOMA */
         .cert-wrapper {
             width: 100%; height: 100%; position: relative; background: #ffffff;
             padding: 40px 60px; display: flex; flex-direction: column;
@@ -101,31 +93,53 @@
         .txt-normal { font-family: 'Montserrat', sans-serif; font-size: 18px; color: #555; margin: 5px 0; }
         .txt-product { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; color: #005f63; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* NOMBRE DOCTOR: Mayúscula inicial, resto minúscula (Title Case) */
         .txt-candidate {
             font-family: 'Great Vibes', cursive; 
-            font-size: 100px; 
-            color: #005f63;
+            font-size: 100px; color: #005f63;
             line-height: 1.2; margin: 10px auto 20px auto; padding: 0 40px;
             border-bottom: 1px solid #e5e5e5; display: inline-block; min-width: 600px;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
             text-transform: none !important; 
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
         }
         
-        .txt-details { font-family: 'Montserrat', sans-serif; font-size: 15px; color: #666; margin-bottom: 5px; font-weight: 500; }
-        /* .txt-trainer-block eliminado para evitar duplicidad */
+        .txt-trainer-block { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 13px; 
+            color: #444; 
+            margin-bottom: 5px; 
+            margin-top: 10px;
+        }
+        .trainer-name { 
+            color: #005f63; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+        }
+
+        .txt-details { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 14px; 
+            color: #666; 
+            margin-bottom: 5px; 
+            font-weight: 500; 
+        }
         
-        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 0 20px; z-index: 10; }
-        .sig-col { text-align: center; width: 240px; }
+        /* FOOTER REDISTRIBUIDO: 2 Firmas centradas */
+        .cert-footer { 
+            display: flex; 
+            justify-content: space-around; /* Redistribuir espacio */
+            align-items: flex-end; 
+            margin-top: 40px; 
+            padding: 0 100px; /* Margen lateral aumentado para centrar */
+            z-index: 10; 
+        }
+        .sig-col { text-align: center; width: 260px; }
         .sig-fake { font-family: 'Great Vibes', cursive; font-size: 32px; color: #005f63; height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px; }
         .sig-line { border-top: 1px solid #999; margin: 5px 0; }
         .sig-name { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: #222; text-transform: uppercase; }
         .sig-role { font-family: 'Montserrat', sans-serif; font-size: 10px; text-transform: uppercase; color: #666; letter-spacing: 0.5px; line-height: 1.2; }
-        .cert-id { position: absolute; bottom: 25px; right: 25px; font-family: monospace; font-size: 11px; color: #aaa; }
         
-        /* Modal Anim */
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .animate-modal { animation: fadeIn 0.2s ease-out forwards; }
+        .cert-id { position: absolute; bottom: 20px; right: 25px; font-family: monospace; font-size: 11px; color: #aaa; }
+        
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
@@ -320,28 +334,28 @@
                     <!-- DATO DINÁMICO: DOCTOR -->
                     <div id="pdf-name" class="txt-candidate">Dr. Name Surname</div>
                     
+                    <!-- TRAINER RESTAURADO EN CUERPO -->
+                    <div class="txt-trainer-block">
+                        Certified by: <span id="pdf-trainer-name" class="trainer-name">---</span>
+                    </div>
+
+                    <!-- UBICACIÓN DINÁMICA (Año y País) -->
                     <div class="txt-details">
-                        @ RCOPT 2025, Ireland on <span id="pdf-date" style="font-weight:bold;">---</span>
+                        @ RCOPT <span id="pdf-year"></span>, Spain on <span id="pdf-date" style="font-weight:bold;">---</span>
                     </div>
                 </div>
 
-                <!-- FOOTER: FIRMAS -->
+                <!-- FOOTER: FIRMAS (2 COLUMNAS) -->
                 <div class="cert-footer">
+                    <!-- Carlos Ríos -->
                     <div class="sig-col">
                         <div class="sig-fake">Carlos Ríos</div>
                         <div class="sig-line"></div>
                         <div class="sig-name">Carlos Ríos</div>
                         <div class="sig-role">Global Business Dev. Manager</div>
                     </div>
-                    
-                    <!-- TRAINER (Centro) -->
-                    <div class="sig-col">
-                        <div class="sig-fake" id="pdf-trainer-sig">---</div>
-                        <div class="sig-line"></div>
-                        <div class="sig-name" id="pdf-trainer-name-sig">---</div>
-                        <div class="sig-role">CLINICAL TRAINER / CERTIFIER</div>
-                    </div>
 
+                    <!-- D. G. Khalsa -->
                     <div class="sig-col">
                         <div class="sig-fake">D. G. Khalsa</div>
                         <div class="sig-line"></div>
@@ -357,7 +371,7 @@
         </div>
     </div>
 
-    <!-- MODAL FINAL (SIMPLE) -->
+    <!-- MODAL FINAL (SOLO CONFIRMACIÓN) -->
     <div id="success-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full relative modal-content border border-white/20">
             <div class="text-center mb-6">
@@ -365,7 +379,7 @@
                     <i class="fas fa-check"></i>
                 </div>
                 <h3 class="text-xl font-bold text-slate-800">¡Certificación Completada!</h3>
-                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente en tu ordenador.</p>
+                <p class="text-sm text-slate-500 mt-2">El diploma se ha generado y descargado correctamente.</p>
             </div>
             
             <button onclick="closeModal()" class="w-full mt-4 bg-slate-800 text-white hover:bg-slate-700 text-sm font-bold py-3 rounded transition shadow-lg">
@@ -375,7 +389,7 @@
     </div>
 
     <script>
-        const DB_KEY = 'biotech_cert_v56_final_no_duplicate';
+        const DB_KEY = 'biotech_cert_v58_final_layout_clean';
         let db = [];
         let currentId = null;
 
@@ -568,13 +582,14 @@
             
             document.getElementById('pdf-id').innerText = cert.id;
             
+            // Trainer y Fecha (Año dinámico)
             const trainerFormatted = toTitleCase(cert.trainer);
-            
-            // Inyectar Trainer solo en firma central y footer
-            document.getElementById('pdf-trainer-sig').innerText = trainerFormatted;
-            document.getElementById('pdf-trainer-name-sig').innerText = trainerFormatted;
+            document.getElementById('pdf-trainer-name').innerText = trainerFormatted;
             
             const finalDate = cert.dateStep2 ? new Date(cert.dateStep2).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
+            const finalYear = cert.dateStep2 ? new Date(cert.dateStep2).getFullYear() : new Date().getFullYear();
+            
+            document.getElementById('pdf-year').innerText = finalYear;
             document.getElementById('pdf-date').innerText = finalDate;
 
             // Mostrar Overlay (CRÍTICO)
